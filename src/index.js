@@ -1,10 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
+import RubeusPrompt from 'rubeus-react-prompt'
 import * as serviceWorker from './serviceWorker'
 
 ReactDOM.render(
-  <App />,
+  <RubeusPrompt appName='Convo Messenger'>
+    <App />
+  </RubeusPrompt>,
   document.getElementById('root')
 )
 
