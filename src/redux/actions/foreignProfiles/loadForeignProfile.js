@@ -1,6 +1,6 @@
 import store from 'redux/store'
 import { LOAD_FOREIGN_PROFILE } from 'redux/types'
-import { PROFILES_PROTOCOL_ADDRESS } from 'parameters'
+import { PROFILES_BUS_ID } from 'parameters'
 import parapet from 'parapet-js'
 
 /*
@@ -37,7 +37,7 @@ export default async userID => {
 
   // Find the profile with parapet
   const queryResult = await parapet({
-    bridge: PROFILES_PROTOCOL_ADDRESS,
+    bridge: PROFILES_BUS_ID,
     request: {
       type: 'json-query',
       query: {

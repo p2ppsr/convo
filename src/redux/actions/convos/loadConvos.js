@@ -1,6 +1,6 @@
 import store from 'redux/store'
 import { UPDATE_CONVOS } from 'redux/types'
-import { MESSAGES_PROTOCOL_ADDRESS } from 'parameters'
+import { MESSAGES_BUS_ID } from 'parameters'
 import loadForeignProfile from 'redux/actions/foreignProfiles/loadForeignProfile'
 import parapet from 'parapet-js'
 import processMessageTransaction from 'utils/processMessageTransaction'
@@ -47,7 +47,7 @@ export default async () => {
   localStorage.convoCacheTime = Date.now()
   const localUserID = await getUserID()
   const result = await parapet({
-    bridge: MESSAGES_PROTOCOL_ADDRESS,
+    bridge: MESSAGES_BUS_ID,
     request: {
       type: 'json-query',
       query: {

@@ -1,12 +1,12 @@
 import parapet from 'parapet-js'
-import { PROFILES_PROTOCOL_ADDRESS } from 'parameters'
+import { PROFILES_BUS_ID } from 'parameters'
 
 /*
 We leverage chainquery to get a list of recent profile publication transactions.
 */
 export default async () => {
   const result = await parapet({
-    bridge: PROFILES_PROTOCOL_ADDRESS,
+    bridge: PROFILES_BUS_ID,
     request: {
       type: 'json-query',
       query: {

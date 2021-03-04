@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import {
   Typography,
   Hidden,
   IconButton,
-  Button,
   Card,
   CardContent
 } from '@material-ui/core'
@@ -14,7 +13,6 @@ import loadConvos from 'redux/actions/convos/loadConvos'
 import loadForeignProfile from 'redux/actions/foreignProfiles/loadForeignProfile'
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import { Link, withRouter } from 'react-router-dom'
-import { isAuthenticated, waitForInitialization } from 'rubeus-js'
 import MessageForm from 'components/MessageForm'
 import EncryptedMessage from 'components/EncryptedMessage'
 
@@ -30,21 +28,14 @@ const Convo = ({
 }) => {
   const classes = useStyles()
   const currentConvo = convos[match.params.userID]
-  const [authenticated, setAuthenticated] = useState(false)
 
   /*
     Load our conversations and the foreign profile for the person we are
     talking with
   */
   useEffect(() => {
-    (async () => {
-      loadForeignProfile(match.params.userID)
-      await waitForInitialization()
-      if (isAuthenticated()) {
-        setAuthenticated(true)
-        loadConvos()
-      }
-    })()
+    loadForeignProfile(match.params.userID)
+    loadConvos()
   }, [match.params.userID])
 
   /*
@@ -60,7 +51,7 @@ const Convo = ({
       <Card square className={classes.convo_header_wrap}>
         <CardContent className={classes.convo_header}>
           <Hidden mdUp>
-            <Link to={authenticated ? '/convos' : '/'}>
+            <Link to='/convos'>
               <IconButton>
                 <ArrowBackIos />
               </IconButton>
@@ -165,18 +156,6 @@ const Convo = ({
                         <Typography variant='h3' algin='center' paragraph>
                           {`Connect with ${foreignProfiles[match.params.userID].name}`}
                         </Typography>
-                        {!authenticated && (
-                          <Button
-                            variant='contained'
-                            color='primary'
-                            onClick={() => {
-                              sessionStorage.CWIRedirectPath = window.location.pathname
-                              history.push('/')
-                            }}
-                          >
-                            Sign Up
-                          </Button>
-                        )}
                       </div>
                     </div>
                   )

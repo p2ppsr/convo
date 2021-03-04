@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { waitForInitialization, isAuthenticated } from 'rubeus-js'
+import React, { useState, useRef } from 'react'
 import sendMessage from 'redux/actions/convos/sendMessage'
 import {
   LinearProgress, IconButton, TextField, FormControlLabel, Checkbox, Fab
@@ -21,27 +20,14 @@ const MessageForm = ({ to }) => {
   const classes = useStyles()
   const messageTextRef = useRef()
   const fileInputRef = useRef()
-  const [authenticated, setAuthenticated] = useState(false)
   const [loading, setLoading] = useState(false)
   const [messageText, setMessageText] = useState('')
   const [secret, setSecret] = useState(false)
   const [photoURL, setPhotoURL] = useState(null)
   const [photoData, setPhotoData] = useState(null)
 
-  useEffect(() => {
-    (async () => {
-      await waitForInitialization()
-      if (isAuthenticated()) {
-        setAuthenticated(true)
-      }
-    })()
-  }, [])
-
   const handleSubmit = async e => {
     e.preventDefault()
-    if (!authenticated) {
-      return
-    }
     setLoading(true)
     // We send photos first (they are generally more expensive)
     if (photoData) {
@@ -136,12 +122,10 @@ const MessageForm = ({ to }) => {
           fullWidth
           variant='outlined'
           autoFocus={!loading}
-          placeholder={authenticated
-            ? 'Send a message...'
-            : 'Sign up to send message...'}
+          placeholder='Send a message...'
           onChange={e => setMessageText(e.target.value)}
           value={messageText}
-          disabled={loading || !authenticated}
+          disabled={loading}
           inputRef={messageTextRef}
         />
         <IconButton color='primary' type='submit'>

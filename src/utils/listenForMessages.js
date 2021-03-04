@@ -1,5 +1,5 @@
 import getUserID from './getUserID'
-import { MESSAGES_PROTOCOL_ADDRESS } from 'parameters'
+import { MESSAGES_BUS_ID } from 'parameters'
 import store from 'redux/store'
 import { SEND_MESSAGE } from 'redux/types'
 import processMessageTransaction from 'utils/processMessageTransaction'
@@ -9,7 +9,7 @@ import parapet from 'parapet-js'
 export default async () => {
   const localUserID = await getUserID()
   const sock = await parapet({
-    bridge: MESSAGES_PROTOCOL_ADDRESS,
+    bridge: MESSAGES_BUS_ID,
     request: {
       type: 'socket',
       query: {

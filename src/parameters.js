@@ -1,9 +1,4 @@
-/*
-
-This file defines the field names for the on-chain protocols that are used by
-this application.
-
-*/
-
-export const PROFILES_PROTOCOL_ADDRESS = '16ibuBM9KzHav3sCXpxjV3bkvU3EXdmDWG'
-export const MESSAGES_PROTOCOL_ADDRESS = '1C3XB5JogptMF4MdU6B3VviniqYzHzzDzf'
+export const PROFILES_PROTOCOL_ADDRESS = '1CUPPJ9Zjs2qCN2BYgAQzFPga66DYL7uFa'
+export const PROFILES_BUS_ID = '16ibuBM9KzHav3sCXpxjV3bkvU3EXdmDWG'
+export const MESSAGES_PROTOCOL_ADDRESS = '1CUMP5cMD9UJSARBvdVEsn8GndRN7dV8Sh'
+export const MESSAGES_BUS_ID = '1C3XB5JogptMF4MdU6B3VviniqYzHzzDzf'

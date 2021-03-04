@@ -1,5 +1,5 @@
 import parapet from 'parapet-js'
-import { PROFILES_PROTOCOL_ADDRESS } from 'parameters'
+import { PROFILES_BUS_ID } from 'parameters'
 
 /*
 As with the getConvos function, a more advanced query here could filter out old versions of user profiles by eliminating all but the latest revision of a profile published by a given userID address from the scope of the search.
@@ -10,7 +10,7 @@ In the future, CWI's chainquery function will switch away from Bitbus and Bitsoc
 */
 export default async query => {
   const result = await parapet({
-    bridge: PROFILES_PROTOCOL_ADDRESS,
+    bridge: PROFILES_BUS_ID,
     request: {
       type: 'json-query',
       query: {

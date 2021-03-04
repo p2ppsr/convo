@@ -26,7 +26,7 @@
     "react-toastify": "^6.0.9",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "rubeus-js": "^0.1.0",
+    "rubeus-js": "^0.1.4",
     "rubeus-react-prompt": "^0.1.0"
   },
   "eslintConfig": {

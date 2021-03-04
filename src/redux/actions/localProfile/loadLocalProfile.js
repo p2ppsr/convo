@@ -1,5 +1,5 @@
 import parapet from 'parapet-js'
-import { PROFILES_PROTOCOL_ADDRESS } from 'parameters'
+import { PROFILES_BUS_ID } from 'parameters'
 import store from 'redux/store'
 import { UPDATE_LOCAL_PROFILE } from 'redux/types'
 import getUserID from 'utils/getUserID'
@@ -28,7 +28,7 @@ export default async () => {
   const userID = await getUserID()
   // Find the profile with chainquery
   const queryResult = await parapet({
-    bridge: PROFILES_PROTOCOL_ADDRESS,
+    bridge: PROFILES_BUS_ID,
     request: {
       type: 'json-query',
       query: {
