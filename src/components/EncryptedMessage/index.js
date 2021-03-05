@@ -5,6 +5,7 @@ import LockIcon from '@material-ui/icons/Lock'
 import PhotoIcon from '@material-ui/icons/Photo'
 import TextIcon from '@material-ui/icons/Subject'
 import { connect } from 'react-redux'
+import decompressPubkey from 'utils/decompressPubkey'
 
 /*
 
@@ -28,7 +29,9 @@ const EncryptedMessage = ({ message, className, foreignProfiles }) => {
           ciphertext: message.content,
           key: 'privilegedSigning',
           path: 'm/2000/1',
-          pub: foreignProfiles[message.foreignID].privilegedSigningPub,
+          pub: await decompressPubkey(
+            foreignProfiles[message.foreignID].privilegedSigningPub
+          ),
           reason
         }))
 

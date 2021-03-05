@@ -36,11 +36,10 @@ export default async () => {
     Object.keys(JSON.parse(localStorage.convoCache)).forEach(profile => {
       loadForeignProfile(profile)
     })
-  }
-
-  // If the cache is not outdated, we are done
-  if (localStorage.convoCacheTime > Date.now() - 300 * 1000) {
-    return
+    // If the cache is not outdated, we are done
+    if (localStorage.convoCacheTime > Date.now() - 300 * 1000) {
+      return
+    }
   }
 
   // First update cache time to prevent multiple callers from triggering the same action

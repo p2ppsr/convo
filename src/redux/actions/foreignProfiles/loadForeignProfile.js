@@ -21,17 +21,15 @@ export default async userID => {
         ...JSON.parse(localStorage[`profile-${userID}`])
       }
     })
-  }
-  // If the cache is not expired, return the result and we are done
-  if (
-    (localStorage[`profile-${userID}-time`] > Date.now() - 900 * 1000) &&
-    (localStorage[`profile-${userID}`])
-  ) {
-    return {
-      userID,
-      ...JSON.parse(localStorage[`profile-${userID}`])
+    // If the cache is not expired, return the result and we are done
+    if (localStorage[`profile-${userID}-time`] > Date.now() - 900 * 1000) {
+      return {
+        userID,
+        ...JSON.parse(localStorage[`profile-${userID}`])
+      }
     }
   }
+
   // Immediately update the cache time to avoid network requests from other callers
   localStorage[`profile-${userID}-time`] = Date.now()
 

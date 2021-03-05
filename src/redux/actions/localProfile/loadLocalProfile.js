@@ -18,10 +18,10 @@ export default async () => {
         loaded: true
       }
     })
-  }
-  // If the cache is not expired then we are done
-  if (localStorage.localProfileTime > Date.now() - 300 * 1000) {
-    return
+    // If the cache is not expired then we are done
+    if (localStorage.localProfileTime > Date.now() - 300 * 1000) {
+      return
+    }
   }
   // Set the localStorage cache time now to avoid multiple calls
   localStorage.localProfileTime = Date.now()

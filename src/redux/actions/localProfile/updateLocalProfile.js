@@ -33,8 +33,7 @@ export default async ({ name, photo }) => {
   ))
 
   // TODO: Once UHRP is done, upload the photo on Hashbrown and put the URL here
-  // For now, everyone will be a corndog :)
-  const photoURL = 'https://corndog.io/corndog-tile-1.png'
+  const photoURL = 'https://bridgeport.babbage.systems/favicon.ico'
   await sendDataTransaction({
     data: [
       new TextEncoder().encode(PROFILES_PROTOCOL_ADDRESS),
