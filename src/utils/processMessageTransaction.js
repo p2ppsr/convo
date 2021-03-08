@@ -9,7 +9,7 @@ export default async message => {
       The message type is encrypted with an ECDH common shared secret between the
       sender and the recipient. To use ECDH, we need the public key of the foreign user.
     */
-    const localUserID = getUserID()
+    const localUserID = await getUserID()
     const foreignID =
       message.recipient === localUserID
         ? message.sender
