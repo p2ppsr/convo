@@ -29,36 +29,40 @@ const MessageForm = ({ to }) => {
   const handleSubmit = async e => {
     e.preventDefault()
     setLoading(true)
-    // We send photos first (they are generally more expensive)
-    if (photoData) {
-      const success = await sendMessage({
-        to,
-        message: {
-          messageType: secret ? 'secret-photo' : 'photo',
-          content: photoData
+    try {
+      // We send photos first (they are generally more expensive)
+      if (photoData) {
+        const success = await sendMessage({
+          to,
+          message: {
+            messageType: secret ? 'secret-photo' : 'photo',
+            content: photoData
+          }
+        })
+        // Clear the photo after it is sent
+        if (success) {
+          setPhotoData(null)
+          setPhotoURL(null)
         }
-      })
-      // Clear the photo after it is sent
-      if (success) {
-        setPhotoData(null)
-        setPhotoURL(null)
       }
-    }
-    if (messageText) {
-      const success = await sendMessage({
-        to,
-        message: {
-          messageType: secret ? 'secret-text' : 'text',
-          content: messageText
+      if (messageText) {
+        const success = await sendMessage({
+          to,
+          message: {
+            messageType: secret ? 'secret-text' : 'text',
+            content: messageText
+          }
+        })
+        if (success) {
+          // Clear the text and re-focus after sending
+          setMessageText('')
+          messageTextRef.current.focus()
         }
-      })
-      if (success) {
-        // Clear the text and re-focus after sending
-        setMessageText('')
-        messageTextRef.current.focus()
       }
+      setLoading(false)
+    } catch (e) {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   // Open the file chooser when the "Send Picture" button is clicked
@@ -107,6 +111,7 @@ const MessageForm = ({ to }) => {
           />
           <Fab
             onClick={handleDeletePhoto}
+            disabled={loading}
             color='secondary'
             className={classes.photo_cancel}
           >
@@ -115,7 +120,11 @@ const MessageForm = ({ to }) => {
         </div>
       )}
       <div className={classes.grid}>
-        <IconButton color='primary' onClick={handlePhotoClick}>
+        <IconButton
+          color='primary'
+          onClick={handlePhotoClick}
+          disabled={loading}
+        >
           <PhotoIcon />
         </IconButton>
         <TextField
@@ -128,7 +137,11 @@ const MessageForm = ({ to }) => {
           disabled={loading}
           inputRef={messageTextRef}
         />
-        <IconButton color='primary' type='submit'>
+        <IconButton
+          color='primary'
+          type='submit'
+          disabled={loading}
+        >
           <SendIcon />
         </IconButton>
       </div>

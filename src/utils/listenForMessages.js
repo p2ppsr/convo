@@ -15,7 +15,6 @@ export default async () => {
       query: {
         v: 3,
         q: {
-          collection: 'messages',
           find: {
             $or: [
               { sender: localUserID },
