@@ -61,6 +61,7 @@ const MessageForm = ({ to }) => {
       }
       setLoading(false)
     } catch (e) {
+      console.error(e)
       setLoading(false)
     }
   }
