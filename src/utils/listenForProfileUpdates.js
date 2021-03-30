@@ -24,10 +24,10 @@ export default async () => {
       return
     }
     // Do not process profiles that are not loaded
-    if (!store.getState().foreignProfiles[e.data.data.userID]) {
+    if (!store.getState().foreignProfiles[data.data.userID]) {
       return
     }
-    const { userID, name, photoURL } = e.data.data
+    const { userID, name, photoURL } = data.data
     // Put the updated profile in state
     store.dispatch({
       type: LOAD_FOREIGN_PROFILE,
