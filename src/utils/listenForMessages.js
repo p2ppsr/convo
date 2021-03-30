@@ -25,21 +25,19 @@ export default async () => {
       }
     }
   })
-  sock.onmessage = e => {
+  sock.onmessage = async e => {
     console.log(e)
     const data = JSON.parse(e.data)
     if (data.type !== 'message') {
       return
     }
-    data.data.forEach(async tx => {
-      const message = await processMessageTransaction(tx)
-      if (message !== null) {
-        store.dispatch({
-          type: SEND_MESSAGE,
-          payload: message
-        })
-      }
-    })
+    const message = await processMessageTransaction(data.data)
+    if (message !== null) {
+      store.dispatch({
+        type: SEND_MESSAGE,
+        payload: message
+      })
+    }
   }
 
   // Wait forever to avoid destroying the objects in this function
