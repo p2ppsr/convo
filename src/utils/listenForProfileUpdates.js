@@ -18,8 +18,9 @@ export default async () => {
     }
   })
   sock.onmessage = e => {
+    console.log(e)
     const data = JSON.parse(e.data)
-    if (data.type !== 'push') {
+    if (data.type !== 'message') {
       return
     }
     data.data.forEach(async tx => {
@@ -44,4 +45,7 @@ export default async () => {
       }
     })
   }
+
+  // Wait forever to avoid destroying the objects in this function
+  await new Promise(() => {})
 }
