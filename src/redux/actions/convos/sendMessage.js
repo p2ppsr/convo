@@ -1,7 +1,7 @@
 import loadForeignProfile from 'redux/actions/foreignProfiles/loadForeignProfile'
 import store from 'redux/store'
 import { SEND_MESSAGE } from 'redux/types'
-import { sendDataTransaction, encrypt, createHmac } from 'rubeus-js'
+import { sendDataTransaction, encrypt, createHmac } from '@babbage/sdk'
 import { MESSAGES_PROTOCOL_ADDRESS } from 'parameters'
 import getUserID from 'utils/getUserID'
 import decompressPubkey from 'utils/decompressPubkey'

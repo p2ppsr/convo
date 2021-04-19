@@ -3,7 +3,7 @@ import loadForeignProfile from 'redux/actions/foreignProfiles/loadForeignProfile
 import authMock from '@cwi/jest-mock'
 import {
   getPrimarySigning, getUserID, sendDataTransaction
-} from 'rubeus-js'
+} from '@babbage/sdk'
 import { MESSAGES_PROTOCOL_ADDRESS } from 'parameters'
 import store from 'redux/store'
 import { SEND_MESSAGE } from 'redux/types'
@@ -30,7 +30,7 @@ jest.mock('redux/store')
 describe('sendMessage', () => {
   beforeAll(async () => {
     await authMock.configure({
-      auth: require('rubeus-js')
+      auth: require('@babbage/sdk')
     })
   })
   it('Obtains the foreign profile', async () => {

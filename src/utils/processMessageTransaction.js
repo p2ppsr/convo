@@ -1,4 +1,4 @@
-import { decrypt } from 'rubeus-js'
+import { decrypt } from '@babbage/sdk'
 import getUserID from './getUserID'
 import loadForeignProfile from 'redux/actions/foreignProfiles/loadForeignProfile'
 import decompressPubkey from 'utils/decompressPubkey'

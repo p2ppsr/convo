@@ -1,6 +1,6 @@
 import loadLocalProfile from '../loadLocalProfile'
 import chainquery from '@cwi/chainquery'
-import { getUserID } from 'rubeus-js'
+import { getUserID } from '@babbage/sdk'
 import { PROFILES_PROTOCOL_ADDRESS } from 'parameters'
 import waitForAuthentication from 'utils/waitForAuthentication'
 import store from 'redux/store'
@@ -17,7 +17,7 @@ const MOCK_VALID_RESULT = [{
 }]
 
 jest.mock('@cwi/chainquery')
-jest.mock('rubeus-js')
+jest.mock('@babbage/sdk')
 jest.mock('utils/waitForAuthentication')
 jest.mock('redux/store')
 

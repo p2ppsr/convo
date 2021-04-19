@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { decrypt } from 'rubeus-js'
+import { decrypt } from '@babbage/sdk'
 import { Typography, Fab, CircularProgress } from '@material-ui/core'
 import LockIcon from '@material-ui/icons/Lock'
 import PhotoIcon from '@material-ui/icons/Photo'

@@ -1,5 +1,5 @@
 import bsv from 'bsv'
-import { getPrimarySigningPub } from 'rubeus-js'
+import { getPrimarySigningPub } from '@babbage/sdk'
 
 export default async () => {
   const xpubKey = await getPrimarySigningPub({

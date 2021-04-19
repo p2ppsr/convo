@@ -1,12 +1,12 @@
 # Convo Mesenger
 
-A private messaging app built with Rubeus
+A private messaging app built with Project Babbage
 
 ## Overview
 
-This is a React app demonstrating the use of [Rubeus](https://rubeus.app) with a simple private messaging experience.
+This is a React app demonstrating the use of [Babbage](https://projectbabbage.com) technologies with a simple private messaging experience.
 
-- The app relies on Rubeus to provide user accounts, key management and account recovery
+- The app relies on the Babbage SDK to provide user accounts, key management and account recovery
 - Bridgeport is used to provide a universal state machine backend powered by BSV transactions and real-time message and profile updates
 - Hashbrown will soon provide a place to store picture messages and user profile photos
 

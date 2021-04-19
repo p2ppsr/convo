@@ -1,6 +1,6 @@
 {
   "name": "convo",
-  "description": "Private messaging app built with Rubeus",
+  "description": "Private messaging app built with Project Babbage",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,6 +11,8 @@
     "lint": "standard --fix ."
   },
   "dependencies": {
+    "@babbage/react-prompt": "^0.1.0",
+    "@babbage/sdk": "^0.1.0",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/styles": "^4.10.0",
@@ -25,9 +27,7 @@
     "react-scripts": "3.4.1",
     "react-toastify": "^6.0.9",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0",
-    "rubeus-js": "^0.1.4",
-    "rubeus-react-prompt": "^0.1.0"
+    "redux-thunk": "^2.3.0"
   },
   "eslintConfig": {
     "extends": "react-app"

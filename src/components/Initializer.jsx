@@ -13,7 +13,7 @@ their new messages. It also listens for changes to user profiles.
 const Initializer = () => {
   useEffect(() => {
     (async () => {
-      // If the Rubeus user has changed, the cache is invalid.
+      // If the user has changed, the cache is invalid.
       if (window.localStorage.localProfile) {
         const currentUserID = await getUserID()
         const cachedUserID = JSON.parse(window.localStorage.localProfile).userID

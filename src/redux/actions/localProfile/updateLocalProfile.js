@@ -1,4 +1,4 @@
-import { getPrimarySigningPub, getPrivilegedSigningPub, sendDataTransaction } from 'rubeus-js'
+import { getPrimarySigningPub, getPrivilegedSigningPub, sendDataTransaction } from '@babbage/sdk'
 import { PROFILES_PROTOCOL_ADDRESS } from 'parameters'
 import store from 'redux/store'
 import { UPDATE_LOCAL_PROFILE } from 'redux/types'

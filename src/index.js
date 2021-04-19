@@ -1,13 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
-import RubeusPrompt from 'rubeus-react-prompt'
+import BabbagePrompt from '@babbage/react-prompt'
 import * as serviceWorker from './serviceWorker'
 
 ReactDOM.render(
-  <RubeusPrompt appName='Convo Messenger'>
+  <BabbagePrompt appName='Convo Messenger'>
     <App />
-  </RubeusPrompt>,
+  </BabbagePrompt>,
   document.getElementById('root')
 )
 

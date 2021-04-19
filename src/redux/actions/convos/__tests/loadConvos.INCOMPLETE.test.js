@@ -3,14 +3,14 @@ import waitForAuthentication from 'utils/waitForAuthentication'
 import store from 'redux/store'
 import { UPDATE_CONVOS } from 'redux/types'
 import loadForeignProfile from 'redux/actions/foreignProfiles/loadForeignProfile'
-import { getUserID } from 'rubeus-js'
+import { getUserID } from '@babbage/sdk'
 import chainquery from '@cwi/chainquery'
 import { MESSAGES_PROTOCOL_ADDRESS } from 'parameters'
 import messageData from './messages.data'
 
 jest.mock('utils/waitForAuthentication')
 jest.mock('redux/store')
-jest.mock('rubeus-js')
+jest.mock('@babbage/sdk')
 jest.mock('redux/actions/foreignProfiles/loadForeignProfile')
 jest.mock('@cwi/chainquery')
 

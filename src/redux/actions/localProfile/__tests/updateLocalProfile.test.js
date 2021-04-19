@@ -1,5 +1,5 @@
 import updateLocalProfile from '../updateLocalProfile'
-import { getUserID, sendDataTransaction } from 'rubeus-js'
+import { getUserID, sendDataTransaction } from '@babbage/sdk'
 import { PROFILES_PROTOCOL_ADDRESS } from 'parameters'
 import store from 'redux/store'
 import { UPDATE_LOCAL_PROFILE } from 'redux/types'
@@ -9,7 +9,7 @@ const VALID_PARAMS = {
   photo: crypto.getRandomValues(new Uint8Array(640))
 }
 
-jest.mock('rubeus-js')
+jest.mock('@babbage/sdk')
 jest.mock('redux/store')
 
 describe('updateLocalProfile', () => {
