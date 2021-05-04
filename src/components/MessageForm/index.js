@@ -28,8 +28,8 @@ const MessageForm = ({ to }) => {
 
   const handleSubmit = async e => {
     e.preventDefault()
-    setLoading(true)
     try {
+      setLoading(true)
       // We send photos first (they are generally more expensive)
       if (photoData) {
         const success = await sendMessage({
@@ -59,9 +59,9 @@ const MessageForm = ({ to }) => {
           messageTextRef.current.focus()
         }
       }
-      setLoading(false)
     } catch (e) {
       console.error(e)
+    } finally {
       setLoading(false)
     }
   }

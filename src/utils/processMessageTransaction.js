@@ -2,6 +2,8 @@ import { decrypt } from '@babbage/sdk'
 import getUserID from './getUserID'
 import loadForeignProfile from 'redux/actions/foreignProfiles/loadForeignProfile'
 import decompressPubkey from 'utils/decompressPubkey'
+import { isValidURL } from 'uhrp-url'
+import { resolve } from 'nanoseek'
 
 export default async message => {
   try {
@@ -34,16 +36,17 @@ export default async message => {
 
     // If the message type is photo or secret-photo, message.content is a URL
     if (messageType === 'photo' || messageType === 'secret-photo') {
-      const parsedURL = atob(message.content)
-      // TODO: For UHRP, resolve the URL to a host first
-      if (parsedURL.startsWith('uhrp:')) {
-        // parsedURL = parsedURL
+      let parsedURL = atob(message.content)
+      // For UHRP, resolve the URL to a host first
+      if (isValidURL(parsedURL)) {
+        const resolved = await resolve({ URL: parsedURL })
+        parsedURL = resolved[0]
       }
       const result = await window.fetch(parsedURL)
       messageData = new Uint8Array(await result.arrayBuffer())
       // For secret photos, messageData needs to be base64 so it can be decrypted later
       if (messageType === 'secret-photo') {
-        messageData = btoa(String.fromCharCode.apply(null, messageData))
+        messageData = Buffer.from(messageData).toString('base64')
       }
 
       /*
@@ -59,7 +62,7 @@ export default async message => {
       messageData = new Uint8Array(await result.arrayBuffer())
       // For secret-text, the message data must be turned into base64 so it can be decrypted later
       if (messageType === 'secret-text') {
-        messageData = btoa(String.fromCharCode.apply(null, messageData))
+        messageData = Buffer.from(messageData).toString('base64')
       }
 
       // When not a photo and not longer than 512 bytes, messageData is just the base64 message.content string
@@ -87,13 +90,13 @@ export default async message => {
       // For pictures, we need to parse the image so that it can be rendered
       // inside an <img /> tag.
       decryptedContent = new Blob([
-        await decrypt({
+        Buffer.from(await decrypt({
           ciphertext: messageData,
           key: 'primarySigning',
           path: 'm/2000/1',
           pub: foreignPrimarySigningPub
-        })]
-      )
+        }), 'base64')
+      ], { type: 'image/png' })
       decryptedContent = await new Promise(resolve => {
         const reader = new window.FileReader()
         reader.onload = () => {

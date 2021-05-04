@@ -14,8 +14,8 @@ export default theme => ({
     position: 'relative'
   },
   photo_preview_img: {
-    width: '5em',
-    maxHeight: '5em',
+    width: '10em',
+    maxHeight: '12em',
     borderRadius: '4px'
   },
   photo_cancel: {

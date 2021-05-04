@@ -60,8 +60,6 @@ When the message type is `photo`, the content field will be an HTTP or UHRP-comp
 
 ### Secret Photo
 
-> Send Nudes
-
 When the message type is `secret-photo`, the content field will be an HTTP or UHRP-compliant URL. Downloading the data from the URL will produce the raw binary image data buffer encrypted with the ECDH shared secret between the sender's privileged signing private key and the recipient's privileged signing public key.
 
 ## Implementation

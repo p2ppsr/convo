@@ -1,10 +1,12 @@
 import loadForeignProfile from 'redux/actions/foreignProfiles/loadForeignProfile'
 import store from 'redux/store'
 import { SEND_MESSAGE } from 'redux/types'
-import { sendDataTransaction, encrypt, createHmac } from '@babbage/sdk'
+import { createAction, encrypt, createHmac } from '@babbage/sdk'
+import { invoice, upload } from 'nanostore-publisher'
 import { MESSAGES_PROTOCOL_ADDRESS } from 'parameters'
 import getUserID from 'utils/getUserID'
 import decompressPubkey from 'utils/decompressPubkey'
+import { getURLForFile } from 'uhrp-url'
 
 export default async ({ to, message }) => {
   /*
@@ -64,31 +66,62 @@ export default async ({ to, message }) => {
     })
   }
 
-  // TODO: For photos and secret-photos the encryptedContent is actually a blob that needs to be uploaded to an HTTPS or UHRP content host. Once encryptedContent is uploaded, and once a public URL has been made available, the URL needs to be inserted here.
+  let resultTXID
+
+  // For photos and secret-photos they are uploaded to NanoStore
   if (
     message.messageType === 'photo' || message.messageType === 'secret-photo'
   ) {
-    // Until this is done, the original thing inside of encryptedContent is lost instad of being uploaded, and it is replaced with the fake URL.
-    // TODO: Upload encryptedContent to an HTTPS or UHRP host, and get the URL of the uploaded file before overwriting encryptedContent with that URL instead of this fake one..
-    encryptedContent = new TextEncoder().encode(
-      'https://bridgeport.babbage.systems/favicon.ico'
-    )
-  }
+    const fileBuffer = Buffer.from(encryptedContent, 'base64')
+    const { referenceNumber, outputs } = await invoice({
+      fileSize: fileBuffer.length,
+      retentionPeriod: 525600 * 5 // 5 years
+    })
+    const fileUrl = await getURLForFile(fileBuffer)
+    encryptedContent = new TextEncoder().encode(fileUrl)
+    const result = await createAction({
+      description: `Send a picture to ${foreignProfile.name}`,
+      keyName: 'primarySigning',
+      keyPath: 'm/2000/1',
+      data: [ // TextEncoder is used on strings to convert them to Uint8Arrays
+        new TextEncoder().encode(MESSAGES_PROTOCOL_ADDRESS),
+        new TextEncoder().encode(localUserID),
+        new TextEncoder().encode(to),
+        new TextEncoder().encode('' + messageTime),
+        messageTypeHash,
+        messageTypeEncrypted,
+        encryptedContent
+      ],
+      outputs: outputs.map(x => ({
+        satoshis: x.amount,
+        script: x.outputScript
+      }))
+    })
+    resultTXID = result.txid
+    await upload({
+      referenceNumber,
+      transactionHex: result.rawTransaction,
+      file: new File([fileBuffer], 'image.png')
+    })
 
-  const resultTXID = await sendDataTransaction({
-    reason: `Send a message to ${foreignProfile.name}`,
-    keyName: 'primarySigning',
-    keyPath: 'm/2000/1',
-    data: [ // TextEncoder is used on strings to convert them to Uint8Arrays
-      new TextEncoder().encode(MESSAGES_PROTOCOL_ADDRESS),
-      new TextEncoder().encode(localUserID),
-      new TextEncoder().encode(to),
-      new TextEncoder().encode('' + messageTime),
-      messageTypeHash,
-      messageTypeEncrypted,
-      encryptedContent
-    ]
-  })
+    // Otherwise, text is simply sent in an Action
+  } else {
+    const result = await createAction({
+      description: `Send a message to ${foreignProfile.name}`,
+      keyName: 'primarySigning',
+      keyPath: 'm/2000/1',
+      data: [ // TextEncoder is used on strings to convert them to Uint8Arrays
+        new TextEncoder().encode(MESSAGES_PROTOCOL_ADDRESS),
+        new TextEncoder().encode(localUserID),
+        new TextEncoder().encode(to),
+        new TextEncoder().encode('' + messageTime),
+        messageTypeHash,
+        messageTypeEncrypted,
+        encryptedContent
+      ]
+    })
+    resultTXID = result.txid
+  }
 
   /*
     Text can be updated with SEND_MESSAGE immediately, but we'll let the
