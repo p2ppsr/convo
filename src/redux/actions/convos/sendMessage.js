@@ -23,7 +23,7 @@ export default async ({ to, message }) => {
   const messageTypeEncrypted = await encrypt({
     key: 'primarySigning',
     path: 'm/2000/1',
-    data: message.messageType,
+    data: window.btoa(message.messageType),
     pub: foreignPrimarySigningPub
   })
 
@@ -46,7 +46,7 @@ export default async ({ to, message }) => {
     encryptedContent = await encrypt({
       key: 'primarySigning',
       path: 'm/2000/1',
-      data: message.content,
+      data: new TextEncoder().encode(message.content),
       pub: foreignPrimarySigningPub
     })
   } else if (
@@ -60,7 +60,7 @@ export default async ({ to, message }) => {
     encryptedContent = await encrypt({
       key: 'privilegedSigning',
       path: 'm/2000/1',
-      data: message.content,
+      data: new TextEncoder().encode(message.content),
       pub: foreignPrivilegedSigningPub,
       reason: `Send a secret message to ${foreignProfile.name}`
     })
