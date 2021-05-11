@@ -29,7 +29,8 @@ export default async message => {
       ciphertext: message.type,
       key: 'primarySigning',
       path: 'm/2000/1',
-      pub: foreignPrimarySigningPub
+      pub: foreignPrimarySigningPub,
+      returnType: 'string'
     })
 
     let messageData
@@ -84,7 +85,8 @@ export default async message => {
         ciphertext: messageData,
         key: 'primarySigning',
         path: 'm/2000/1',
-        pub: foreignPrimarySigningPub
+        pub: foreignPrimarySigningPub,
+        returnType: 'string'
       })
     } else if (messageType === 'photo') {
       // For pictures, we need to parse the image so that it can be rendered

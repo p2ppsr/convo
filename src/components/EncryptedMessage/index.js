@@ -32,7 +32,8 @@ const EncryptedMessage = ({ message, className, foreignProfiles }) => {
           pub: await decompressPubkey(
             foreignProfiles[message.foreignID].privilegedSigningPub
           ),
-          reason
+          reason,
+          returnType: 'string'
         }))
 
       /*
@@ -40,12 +41,12 @@ const EncryptedMessage = ({ message, className, foreignProfiles }) => {
       */
       } else if (message.messageType === 'secret-photo') {
         const blob = new Blob([
-          await decrypt({
+          Buffer.from(await decrypt({
             ciphertext: message.content,
             key: 'privilegedSigning',
             pub: foreignProfiles[message.foreignID].privilegedSigningPub,
             reason
-          })
+          }), 'base64')
         ])
         const reader = new window.FileReader()
         reader.onload = () => {
