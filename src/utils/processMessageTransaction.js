@@ -36,6 +36,7 @@ export default async message => {
     let messageData
 
     // If the message type is photo or secret-photo, message.content is a URL
+    // We put the URL in messageData so as not to clog up localStorage with giant photos
     if (messageType === 'photo' || messageType === 'secret-photo') {
       let parsedURL = atob(message.content)
       // For UHRP, resolve the URL to a host first
@@ -43,12 +44,13 @@ export default async message => {
         const resolved = await resolve({ URL: parsedURL })
         parsedURL = resolved[0]
       }
-      const result = await window.fetch(parsedURL)
-      messageData = new Uint8Array(await result.arrayBuffer())
-      // For secret photos, messageData needs to be base64 so it can be decrypted later
-      if (messageType === 'secret-photo') {
-        messageData = Buffer.from(messageData).toString('base64')
-      }
+      messageData = parsedURL
+      // const result = await window.fetch(parsedURL)
+      // messageData = new Uint8Array(await result.arrayBuffer())
+      // // For secret photos, messageData needs to be base64 so it can be decrypted later
+      // if (messageType === 'secret-photo') {
+      //   messageData = Buffer.from(messageData).toString('base64')
+      // }
 
       /*
         When messageType is text or secret-text, the message content is sometimes more than 512 bytes long. If it is longer than 512 bytes, it needs to be fetched from Bitfs.
@@ -88,25 +90,25 @@ export default async message => {
         pub: foreignPrimarySigningPub,
         returnType: 'string'
       })
-    } else if (messageType === 'photo') {
-      // For pictures, we need to parse the image so that it can be rendered
-      // inside an <img /> tag.
-      decryptedContent = new Blob([
-        Buffer.from(await decrypt({
-          ciphertext: messageData,
-          key: 'primarySigning',
-          path: 'm/2000/1',
-          pub: foreignPrimarySigningPub
-        }), 'base64')
-      ], { type: 'image/png' })
-      decryptedContent = await new Promise(resolve => {
-        const reader = new window.FileReader()
-        reader.onload = () => {
-          resolve(reader.result)
-        }
-        reader.readAsDataURL(decryptedContent)
-      })
-    }
+    } // else if (messageType === 'photo') {
+    //   // For pictures, we need to parse the image so that it can be rendered
+    //   // inside an <img /> tag.
+    //   decryptedContent = new Blob([
+    //     Buffer.from(await decrypt({
+    //       ciphertext: messageData,
+    //       key: 'primarySigning',
+    //       path: 'm/2000/1',
+    //       pub: foreignPrimarySigningPub
+    //     }), 'base64')
+    //   ], { type: 'image/png' })
+    //   decryptedContent = await new Promise(resolve => {
+    //     const reader = new window.FileReader()
+    //     reader.onload = () => {
+    //       resolve(reader.result)
+    //     }
+    //     reader.readAsDataURL(decryptedContent)
+    //   })
+    // }
 
     // The data is returned in a conveniently-shaped format.
     // When content was not decrypted (messageType is secret-text or secret-photo), messageData should be a base64 that was encrypted with privileged signing. This is decrypted later on by the user, if desired.

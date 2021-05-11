@@ -40,11 +40,17 @@ const EncryptedMessage = ({ message, className, foreignProfiles }) => {
         For picture messages, we need to parse the decrypted file so that it can bee rendered in an < img /> tag.
       */
       } else if (message.messageType === 'secret-photo') {
+        // Get the URL
+        const result = await window.fetch(message.content)
+        const messageData = new Uint8Array(await result.arrayBuffer())
         const blob = new Blob([
           Buffer.from(await decrypt({
-            ciphertext: message.content,
+            ciphertext: messageData,
             key: 'privilegedSigning',
-            pub: foreignProfiles[message.foreignID].privilegedSigningPub,
+            path: 'm/2000/1',
+            pub: await decompressPubkey(
+              foreignProfiles[message.foreignID].privilegedSigningPub
+            ),
             reason
           }), 'base64')
         ])

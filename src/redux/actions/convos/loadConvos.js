@@ -86,7 +86,11 @@ export default async () => {
           ...store.getState().convos[user],
           ...Object.fromEntries(
             decryptedMessages
-              .filter(message => message !== null && message.foreignID === user)
+              .filter(
+                message =>
+                  message !== null &&
+                  message.foreignID === user
+              )
               .sort((a, b) => a.time > b.time ? 1 : -1)
               .map(message => {
                 return [
@@ -99,11 +103,12 @@ export default async () => {
       ]
     }))
   }
-  // Cache the structure and dispatch the update
-  localStorage.convoCache = JSON.stringify(completeStructure)
-  localStorage.convoCacheTime = Date.now()
   store.dispatch({
     type: UPDATE_CONVOS,
     payload: completeStructure
   })
+
+  // Cache the structure and dispatch the update
+  localStorage.convoCache = JSON.stringify(completeStructure)
+  localStorage.convoCacheTime = Date.now()
 }

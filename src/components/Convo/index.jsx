@@ -15,6 +15,7 @@ import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import { Link, withRouter } from 'react-router-dom'
 import MessageForm from 'components/MessageForm'
 import EncryptedMessage from 'components/EncryptedMessage'
+import Message from 'components/Message'
 
 const useStyles = makeStyles(style, {
   name: 'Convo'
@@ -88,29 +89,16 @@ const Convo = ({
                     .map((message, i) => {
                       switch (message.messageType) {
                         case 'text':
-                          return (
-                            <Typography
-                              key={i}
-                              className={
-                                message.senderID === message.foreignID
-                                  ? classes.foreign_message
-                                  : classes.local_message
-                              }
-                            >
-                              {message.content}
-                            </Typography>
-                          )
                         case 'photo':
                           return (
-                            <img
+                            <Message
                               key={i}
                               className={
                                 message.senderID === message.foreignID
                                   ? classes.foreign_message
                                   : classes.local_message
                               }
-                              alt='message'
-                              src={message.content}
+                              message={message}
                             />
                           )
                         case 'secret-text':

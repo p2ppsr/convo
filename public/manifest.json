@@ -30,6 +30,11 @@
     },
     "pathPermissions": {
       "m/2000": "We use this data so that you can send messages and manage your Convo profile with our app."
+    },
+    "spendingAuthorization": {
+      "description": "Send text and picture messages to your friends securely on the BSV blockchain.",
+      "duration": 3888000,
+      "amount": 1500000
     }
   }
 }

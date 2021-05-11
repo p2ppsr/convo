@@ -46,7 +46,9 @@ export default async ({ to, message }) => {
     encryptedContent = await encrypt({
       key: 'primarySigning',
       path: 'm/2000/1',
-      data: new TextEncoder().encode(message.content),
+      data: message.messageType === 'text'
+        ? new TextEncoder().encode(message.content)
+        : message.content,
       pub: foreignPrimarySigningPub
     })
   } else if (
@@ -60,7 +62,9 @@ export default async ({ to, message }) => {
     encryptedContent = await encrypt({
       key: 'privilegedSigning',
       path: 'm/2000/1',
-      data: new TextEncoder().encode(message.content),
+      data: message.messageType === 'secret-text'
+        ? new TextEncoder().encode(message.content)
+        : message.content,
       pub: foreignPrivilegedSigningPub,
       reason: `Send a secret message to ${foreignProfile.name}`
     })
@@ -136,7 +140,9 @@ export default async ({ to, message }) => {
         senderID: localUserID,
         time: messageTime,
         messageType: message.messageType,
-        content: message.content
+        content: message.messageType === 'text'
+          ? message.content
+          : encryptedContent
       }
     })
   }
