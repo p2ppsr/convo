@@ -8,6 +8,7 @@ import EditIcon from '@material-ui/icons/Edit'
 import SettingsIcon from '@material-ui/icons/Settings'
 import style from './style'
 import loadLocalProfile from 'redux/actions/localProfile/loadLocalProfile'
+import { Img } from 'uhrp-react'
 
 const useStyles = makeStyles(style, {
   name: 'LocalProfile'
@@ -41,7 +42,7 @@ const LocalProfile = ({ name, photoURL, loaded }) => {
 
   return (
     <div className={classes.content_wrap}>
-      <img src={photoURL} className={classes.photo} alt='' />
+      <Img src={photoURL} className={classes.photo} alt='' />
       <Typography variant='h4'>
         {loaded ? name : '———'}
       </Typography>

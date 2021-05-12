@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import loadConvos from 'redux/actions/convos/loadConvos'
 import style from './style'
 import { makeStyles } from '@material-ui/core/styles'
+import { Img } from 'uhrp-react'
 
 const useStyles = makeStyles(style, {
   name: 'ConvoList'
@@ -67,7 +68,7 @@ const ConvoList = ({ convos, foreignProfiles }) => {
                 selected={window.location.pathname === `/convos/${userID}`}
               >
                 <ListItemIcon>
-                  <img src={foreignProfiles[userID] && foreignProfiles[userID].photoURL} className={classes.photo} alt='' />
+                  <Img src={foreignProfiles[userID] && foreignProfiles[userID].photoURL} className={classes.photo} alt='' />
                 </ListItemIcon>
                 <ListItemText
                   inset

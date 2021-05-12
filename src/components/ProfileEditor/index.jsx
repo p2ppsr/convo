@@ -19,6 +19,7 @@ import updateLocalProfile from 'redux/actions/localProfile/updateLocalProfile'
 import store from 'redux/store'
 import { UPDATE_LOCAL_PROFILE } from 'redux/types'
 import { toast } from 'react-toastify'
+import { Img } from 'uhrp-react'
 
 const useStyles = makeStyles(style, {
   name: 'ProfileEditor'
@@ -62,23 +63,21 @@ const ProfileEditor = ({ open, welcome, name, photoURL }) => {
     }
     setLoading(true)
     let photoUint8Array
-    if (photoURL === editablePhotoURL) {
-      const result = await window.fetch(photoURL)
-      photoUint8Array = new Uint8Array(await result.arrayBuffer())
-    } else {
+    if (photoURL !== editablePhotoURL) {
       photoUint8Array = new Uint8Array(await imageBlob.arrayBuffer())
     }
     try {
+      // Either the new photo is passed as a Uint8Array or an existing photo URL is used
+      await updateLocalProfile({
+        name: editableName,
+        photo: photoUint8Array || photoURL
+      })
       store.dispatch({
         type: UPDATE_LOCAL_PROFILE,
         payload: {
           editorOpen: false,
           welcomeMessage: false
         }
-      })
-      await updateLocalProfile({
-        name: editableName,
-        photo: photoUint8Array
       })
     } catch (e) {
       toast.error(e.message)
@@ -132,7 +131,7 @@ const ProfileEditor = ({ open, welcome, name, photoURL }) => {
     return new Promise((resolve, reject) => {
       canvas.toBlob(blob => {
         if (!blob) {
-          toast.error(true)
+          toast.error('Click and drag to crop your image!')
           return
         }
         resolve(window.URL.createObjectURL(blob))
@@ -207,7 +206,7 @@ const ProfileEditor = ({ open, welcome, name, photoURL }) => {
                   <UploadIcon />
                 </Fab>
                 {editablePhotoURL && (
-                  <img
+                  <Img
                     src={editablePhotoURL}
                     className={classes.photo}
                     alt=''
@@ -235,9 +234,9 @@ const ProfileEditor = ({ open, welcome, name, photoURL }) => {
         <DialogActions>
           <Button
             type='submit'
-            disabled={(!!imageCropSrc) || loading}
+            disabled={(!!imageCropSrc) || loading || !editableName}
           >
-            {!loading ? 'Save' : 'Loading...'}
+            Save
           </Button>
         </DialogActions>
       </form>

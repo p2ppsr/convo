@@ -38,7 +38,7 @@ export default async () => {
           find: { userID },
           limit: 1,
           sort: {
-            'blk.t': -1
+            timestamp: -1
           }
         }
       }
