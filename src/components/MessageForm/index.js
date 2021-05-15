@@ -7,6 +7,8 @@ import PhotoIcon from '@material-ui/icons/Photo'
 import SendIcon from '@material-ui/icons/Send'
 import { makeStyles } from '@material-ui/core/styles'
 import style from './style'
+import { toast } from 'react-toastify'
+
 const useStyles = makeStyles(style, {
   name: 'MessageForm'
 })
@@ -60,7 +62,10 @@ const MessageForm = ({ to }) => {
         }
       }
     } catch (e) {
-      console.error(e)
+      if (window.Bugsnag) {
+        window.Bugsnag.notify(e)
+      }
+      toast.error(e.message)
     } finally {
       setLoading(false)
     }

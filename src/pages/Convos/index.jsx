@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, Hidden, Card, CardContent, useMediaQuery } from '@material-ui/core'
+import { Typography, Hidden, Card, CardContent } from '@material-ui/core'
 import LocalProfile from 'components/LocalProfile'
 import ConvoList from 'components/ConvoList'
 import NewUsersList from 'components/NewUsersList'
@@ -15,9 +15,6 @@ const useStyles = makeStyles(style, {
 
 const Convos = ({ theme }) => {
   const classes = useStyles()
-  const isDesktop = useMediaQuery(
-    theme.breakpoints.up('md')
-  )
   return (
     <div className={classes.content_wrap}>
       <div
@@ -44,18 +41,6 @@ const Convos = ({ theme }) => {
         </Card>
       </div>
       <div className={classes.full_height}>
-        {window.location.pathname === '/convos' && (
-          <Hidden smDown>
-            <Typography
-              variant='h1'
-              paragraph
-              align='center'
-              className={classes.app_title}
-            >
-              Convo Messenger
-            </Typography>
-          </Hidden>
-        )}
         <Switch>
           <Route
             path='/convos/:userID'
@@ -65,15 +50,22 @@ const Convos = ({ theme }) => {
               </div>
             )}
           />
-          {isDesktop && (
-            <Route
-              path='/convos' component={() => (
+          <Route
+            path='/convos' component={() => (
+              <Hidden smDown>
+                <Typography
+                  variant='h1'
+                  align='center'
+                  className={classes.app_title}
+                >
+                  Convo Messenger
+                </Typography>
                 <Typography color='textSecondary' align='center'>
                     No convo selected
                 </Typography>
-              )}
-            />
-          )}
+              </Hidden>
+            )}
+          />
         </Switch>
       </div>
     </div>

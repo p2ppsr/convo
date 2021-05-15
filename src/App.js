@@ -20,15 +20,12 @@ if (process.env.REACT_APP_NODE_ENV === 'production') {
     plugins: [new BugsnagPluginReact()]
   })
   ErrorBoundary = Bugsnag.getPlugin('react').createErrorBoundary(React)
+  window.Bugsnag = Bugsnag
 }
 
 const App = () => {
   return (
-    <ErrorBoundary
-      fallbackComponent={
-        () => <div>Something went wrong!</div>
-      }
-    >
+    <ErrorBoundary onError={e => console.error(e)}>
       <Provider store={store}>
         <Theme>
           <Router>
