@@ -6,7 +6,7 @@ import NewUsersList from 'components/NewUsersList'
 import UserSearch from 'components/UserSearch'
 import style from './style'
 import { makeStyles, withTheme } from '@material-ui/core/styles'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import Convo from 'components/Convo'
 
 const useStyles = makeStyles(style, {
@@ -66,6 +66,7 @@ const Convos = ({ theme }) => {
               </Hidden>
             )}
           />
+          <Redirect from='/' to='/convos' />
         </Switch>
       </div>
     </div>
