@@ -40,10 +40,7 @@ const NewUsersList = ({ convos, localProfile }) => {
             key={i}
             to={`/convos/${user.userID}`}
           >
-            <ListItem
-              button
-              selected={window.location.pathname === `/convos/${user.userID}`}
-            >
+            <ListItem button>
               <ListItemIcon>
                 <Img src={user.photoURL} className={classes.photo} alt='' />
               </ListItemIcon>
