@@ -9,30 +9,48 @@ import ProfileEditor from './components/ProfileEditor'
 import SettingsModal from './components/SettingsModal'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import Bugsnag from '@bugsnag/js'
+import BugsnagPluginReact from '@bugsnag/plugin-react'
+
+let ErrorBoundary = x => x.children
+
+if (process.env.REACT_APP_NODE_ENV === 'production') {
+  Bugsnag.start({
+    apiKey: process.env.REACT_APP_BUGSNAG_KEY,
+    plugins: [new BugsnagPluginReact()]
+  })
+  ErrorBoundary = Bugsnag.getPlugin('react').createErrorBoundary(React)
+}
 
 const App = () => {
   return (
-    <Provider store={store}>
-      <Theme>
-        <Router>
-          {/*
+    <ErrorBoundary
+      fallbackComponent={
+        () => <div>Something went wrong!</div>
+      }
+    >
+      <Provider store={store}>
+        <Theme>
+          <Router>
+            {/*
             This is the application-specific initializer component. It waits
             for the user to be authorized, then starts listing for any of their
             new messages.
           */}
-          <Initializer />
-          <ProfileEditor />
-          <SettingsModal />
-          <ToastContainer
-            position='top-center'
-            hideProgressBar
-          />
-          <Switch>
-            <Route path='/' component={Convos} />
-          </Switch>
-        </Router>
-      </Theme>
-    </Provider>
+            <Initializer />
+            <ProfileEditor />
+            <SettingsModal />
+            <ToastContainer
+              position='top-center'
+              hideProgressBar
+            />
+            <Switch>
+              <Route path='/' component={Convos} />
+            </Switch>
+          </Router>
+        </Theme>
+      </Provider>
+    </ErrorBoundary>
   )
 }
 

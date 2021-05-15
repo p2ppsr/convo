@@ -7,7 +7,8 @@ export default theme => ({
   convo_header_wrap: {
     position: 'sticky',
     top: '0px',
-    margin: '0px'
+    margin: '0px',
+    zIndex: 1600
   },
   convo_header: {
     display: 'grid',

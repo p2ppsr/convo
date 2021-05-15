@@ -16,6 +16,7 @@ import { Link, withRouter } from 'react-router-dom'
 import MessageForm from 'components/MessageForm'
 import EncryptedMessage from 'components/EncryptedMessage'
 import Message from 'components/Message'
+import { Img } from 'uhrp-react'
 
 const useStyles = makeStyles(style, {
   name: 'Convo'
@@ -58,7 +59,7 @@ const Convo = ({
               </IconButton>
             </Link>
           </Hidden>
-          <img
+          <Img
             className={classes.photo}
             src={
               foreignProfiles[match.params.userID] &&
@@ -94,9 +95,9 @@ const Convo = ({
                             <Message
                               key={i}
                               className={
-                                message.senderID === message.foreignID
-                                  ? classes.foreign_message
-                                  : classes.local_message
+                                message.senderID !== message.foreignID
+                                  ? classes.local_message
+                                  : classes.foreign_message
                               }
                               message={message}
                             />
@@ -107,9 +108,9 @@ const Convo = ({
                             <EncryptedMessage
                               key={i}
                               className={
-                                message.senderID === message.foreignID
-                                  ? classes.foreign_message
-                                  : classes.local_message
+                                message.senderID !== message.foreignID
+                                  ? classes.local_message
+                                  : classes.foreign_message
                               }
                               message={message}
                             />
@@ -136,7 +137,7 @@ const Convo = ({
                   : (
                     <div className={classes.no_messages}>
                       <div>
-                        <img
+                        <Img
                           src={foreignProfiles[match.params.userID].photoURL}
                           alt={foreignProfiles[match.params.userID].name}
                           className={classes.center_photo}

@@ -5,6 +5,7 @@ import style from './style'
 import { makeStyles } from '@material-ui/core/styles'
 import findNewUsers from 'utils/findNewUsers'
 import { connect } from 'react-redux'
+import { Img } from 'uhrp-react'
 
 const useStyles = makeStyles(style, {
   name: 'NewUsersList'
@@ -44,7 +45,7 @@ const NewUsersList = ({ convos, localProfile }) => {
               selected={window.location.pathname === `/convos/${user.userID}`}
             >
               <ListItemIcon>
-                <img src={user.photoURL} className={classes.photo} alt='' />
+                <Img src={user.photoURL} className={classes.photo} alt='' />
               </ListItemIcon>
               <ListItemText inset primary={user.name} />
             </ListItem>

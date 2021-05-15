@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom'
 import style from './style'
 import { makeStyles } from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search'
+import { Img } from 'uhrp-react'
 
 const useStyles = makeStyles(style, {
   name: 'UserSearch'
@@ -73,7 +74,7 @@ const UserSearch = () => {
           <Link to={`/convos/${p.userID}`} key={i}>
             <ListItem button>
               <ListItemIcon>
-                <img
+                <Img
                   src={p.photoURL}
                   alt=''
                   className={classes.photo}

@@ -19,6 +19,7 @@ export default async query => {
           collection: 'profiles',
           find: {
             // TODO: Text search query
+            // $text: { $search: query }
             name: query
           },
           limit: 10,

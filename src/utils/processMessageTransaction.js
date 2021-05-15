@@ -90,25 +90,7 @@ export default async message => {
         pub: foreignPrimarySigningPub,
         returnType: 'string'
       })
-    } // else if (messageType === 'photo') {
-    //   // For pictures, we need to parse the image so that it can be rendered
-    //   // inside an <img /> tag.
-    //   decryptedContent = new Blob([
-    //     Buffer.from(await decrypt({
-    //       ciphertext: messageData,
-    //       key: 'primarySigning',
-    //       path: 'm/2000/1',
-    //       pub: foreignPrimarySigningPub
-    //     }), 'base64')
-    //   ], { type: 'image/png' })
-    //   decryptedContent = await new Promise(resolve => {
-    //     const reader = new window.FileReader()
-    //     reader.onload = () => {
-    //       resolve(reader.result)
-    //     }
-    //     reader.readAsDataURL(decryptedContent)
-    //   })
-    // }
+    }
 
     // The data is returned in a conveniently-shaped format.
     // When content was not decrypted (messageType is secret-text or secret-photo), messageData should be a base64 that was encrypted with privileged signing. This is decrypted later on by the user, if desired.
