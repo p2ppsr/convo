@@ -22,9 +22,6 @@ export default theme => ({
       display: 'none'
     }
   },
-  app_title: {
-    marginTop: `calc(50vh - ${theme.spacing(3)}px)`
-  },
   sticky_card: {
     position: 'sticky',
     top: '0px',
@@ -43,5 +40,14 @@ export default theme => ({
   },
   full_height: {
     height: '100%'
+  },
+  center_grid: {
+    display: 'grid',
+    placeItems: 'center',
+    height: '100vh',
+    width: '100%'
+  },
+  convo_logo: {
+    width: '50%'
   }
 })

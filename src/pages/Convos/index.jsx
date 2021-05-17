@@ -53,16 +53,25 @@ const Convos = ({ theme }) => {
           <Route
             path='/convos' component={() => (
               <Hidden smDown>
-                <Typography
-                  variant='h1'
-                  align='center'
-                  className={classes.app_title}
-                >
-                  Convo Messenger
-                </Typography>
-                <Typography color='textSecondary' align='center'>
-                    No convo selected
-                </Typography>
+                <div className={classes.center_grid}>
+                  <center>
+                    <img
+                      alt='Convo'
+                      title='Convo'
+                      className={classes.convo_logo}
+                      src='/icon.png'
+                    />
+                    <Typography
+                      variant='h1'
+                      className={classes.app_title}
+                    >
+                      Convo Messenger
+                    </Typography>
+                    <Typography color='textSecondary'>
+                      No convo selected
+                    </Typography>
+                  </center>
+                </div>
               </Hidden>
             )}
           />

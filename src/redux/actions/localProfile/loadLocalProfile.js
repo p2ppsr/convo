@@ -55,7 +55,9 @@ export default async () => {
       payload: {
         loaded: false,
         editorOpen: true,
-        welcomeMessage: true
+        welcomeMessage: true,
+        // Also set the default profile photo
+        photoURL: 'uhrp:XUUDw85K5U6ccmjGjtirk1wZnsruBXayzuLeqz4woTQK1LfhvuY6'
       }
     })
     return
