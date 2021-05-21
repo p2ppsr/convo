@@ -2,6 +2,8 @@
 
 A private messaging app built with Project Babbage
 
+[View it on the web](https://convo.babbage.systems)
+
 ## Overview
 
 This is a React app demonstrating the use of [Babbage](https://projectbabbage.com) technologies with a simple private messaging experience.
