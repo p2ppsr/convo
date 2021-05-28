@@ -11,7 +11,7 @@
     "lint": "standard --fix ."
   },
   "dependencies": {
-    "@babbage/react-prompt": "^0.1.0",
+    "@babbage/react-prompt": "^0.1.1",
     "@babbage/sdk": "^0.1.2",
     "@bugsnag/js": "^7.9.2",
     "@bugsnag/plugin-react": "^7.9.2",
