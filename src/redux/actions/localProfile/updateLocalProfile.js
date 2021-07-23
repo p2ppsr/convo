@@ -60,7 +60,7 @@ export default async ({ name, photo }) => {
     photoURL = `uhrp:${photoURL}`
   }
 
-  const { rawTransaction } = await createAction({
+  const { rawTx } = await createAction({
     data: [
       new TextEncoder().encode(PROFILES_PROTOCOL_ADDRESS),
       new TextEncoder().encode(userID),
@@ -80,7 +80,7 @@ export default async ({ name, photo }) => {
   if (referenceNumber) {
     await upload({
       referenceNumber,
-      transactionHex: rawTransaction,
+      transactionHex: rawTx,
       file: new File([photo], 'image.png')
     })
   }

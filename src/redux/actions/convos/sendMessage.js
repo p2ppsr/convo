@@ -104,7 +104,9 @@ export default async ({ to, message }) => {
     resultTXID = result.txid
     await upload({
       referenceNumber,
-      transactionHex: result.rawTransaction,
+      transactionHex: result.rawTx,
+      inputs: result.inputs,
+      mapiResponses: result.mapiResponses,
       file: new File([fileBuffer], 'image.png')
     })
 
