@@ -101,6 +101,7 @@ export default async ({ to, message }) => {
         script: x.outputScript
       }))
     })
+    console.log(result)
     resultTXID = result.txid
     await upload({
       referenceNumber,
@@ -126,6 +127,7 @@ export default async ({ to, message }) => {
         encryptedContent
       ]
     })
+    console.log(result)
     resultTXID = result.txid
   }
 

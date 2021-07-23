@@ -60,7 +60,7 @@ export default async ({ name, photo }) => {
     photoURL = `uhrp:${photoURL}`
   }
 
-  const { rawTx } = await createAction({
+  const result = await createAction({
     data: [
       new TextEncoder().encode(PROFILES_PROTOCOL_ADDRESS),
       new TextEncoder().encode(userID),
@@ -75,6 +75,8 @@ export default async ({ name, photo }) => {
     keyPath: 'm/2000/1',
     description: 'Upload your new profile'
   })
+  console.log(result)
+  const { rawTx } = result
 
   // If there were NanoStore outputs, upload the new photo and pay the invoice
   if (referenceNumber) {
