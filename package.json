@@ -20,7 +20,7 @@
     "@material-ui/styles": "^4.10.0",
     "bsv": "^1.5.4",
     "nanoseek": "^0.1.1",
-    "nanostore-publisher": "^0.1.0",
+    "nanostore-publisher": "^0.1.2",
     "parapet-js": "^0.1.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
