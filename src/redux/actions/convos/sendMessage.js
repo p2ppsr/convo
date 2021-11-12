@@ -99,7 +99,8 @@ export default async ({ to, message }) => {
       outputs: outputs.map(x => ({
         satoshis: x.amount,
         script: x.outputScript
-      }))
+      })),
+      bridges: ['1C3XB5JogptMF4MdU6B3VviniqYzHzzDzf'] // CUMP
     })
     console.log(result)
     resultTXID = result.txid
@@ -125,9 +126,9 @@ export default async ({ to, message }) => {
         messageTypeHash,
         messageTypeEncrypted,
         encryptedContent
-      ]
+      ],
+      bridges: ['1C3XB5JogptMF4MdU6B3VviniqYzHzzDzf'] // CUMP
     })
-    console.log(result)
     resultTXID = result.txid
   }
 

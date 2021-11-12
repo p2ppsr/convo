@@ -73,7 +73,8 @@ export default async ({ name, photo }) => {
     outputs,
     keyName: 'primarySigning',
     keyPath: 'm/2000/1',
-    description: 'Upload your new profile'
+    description: 'Upload your new profile',
+    bridges: ['16ibuBM9KzHav3sCXpxjV3bkvU3EXdmDWG'] // CUPP
   })
   console.log(result)
   const { rawTx } = result
