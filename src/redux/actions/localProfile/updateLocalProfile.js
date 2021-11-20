@@ -17,7 +17,8 @@ export default async ({ name, photo }) => {
     path: 'm/2000/1'
   })
   let privilegedSigningPub = await getPrivilegedSigningPub({
-    path: 'm/2000/1'
+    path: 'm/2000/1',
+    reason: 'Update your Convo profile'
   })
 
   // Convert the keys into the specified format
@@ -73,16 +74,18 @@ export default async ({ name, photo }) => {
     outputs,
     keyName: 'primarySigning',
     keyPath: 'm/2000/1',
-    description: 'Upload your new profile',
+    description: 'Update your Convo profile',
     bridges: ['16ibuBM9KzHav3sCXpxjV3bkvU3EXdmDWG'] // CUPP
   })
   console.log(result)
-  const { rawTx } = result
+  const { rawTx, inputs, mapiResponses } = result
 
   // If there were NanoStore outputs, upload the new photo and pay the invoice
   if (referenceNumber) {
     await upload({
       referenceNumber,
+      inputs,
+      mapiResponses,
       transactionHex: rawTx,
       file: new File([photo], 'image.png')
     })
@@ -94,8 +97,6 @@ export default async ({ name, photo }) => {
     name,
     photoURL
   }
-  localStorage.localProfile = JSON.stringify(newProfile)
-  localStorage.localProfileTime = Date.now()
   store.dispatch({
     type: UPDATE_LOCAL_PROFILE,
     payload: {

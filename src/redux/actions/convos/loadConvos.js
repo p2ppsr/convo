@@ -1,49 +1,15 @@
 import store from 'redux/store'
 import { UPDATE_CONVOS } from 'redux/types'
 import { MESSAGES_BUS_ID } from 'parameters'
-import loadForeignProfile from 'redux/actions/foreignProfiles/loadForeignProfile'
 import parapet from 'parapet-js'
 import processMessageTransaction from 'utils/processMessageTransaction'
 import getUserID from 'utils/getUserID'
 
 /*
 This action loads all conversations and populates them into state.
-It starts by pulling in cached convos from localStorage.
-Then, if necessary, it will update the state and the cache from the blockchain.
+It will update the state from the blockchain.
 */
 export default async () => {
-  // Restore from cache immediately
-  if (localStorage.convoCache) {
-    store.dispatch({
-      type: UPDATE_CONVOS,
-      payload: {
-        ...store.getState().convos,
-        ...Object.fromEntries(
-          Object.entries(JSON.parse(localStorage.convoCache))
-            .map(([user, msgs]) => ([
-              user,
-              {
-                // This ensures that any messages already in state don't get
-                // overwritten by old data in cache.
-                ...store.getState().convos[user],
-                ...msgs
-              }
-            ]))
-        )
-      }
-    })
-    // All foreign profiles should be loaded
-    Object.keys(JSON.parse(localStorage.convoCache)).forEach(profile => {
-      loadForeignProfile(profile)
-    })
-    // If the cache is not outdated, we are done
-    if (localStorage.convoCacheTime > Date.now() - 300 * 1000) {
-      return
-    }
-  }
-
-  // First update cache time to prevent multiple callers from triggering the same action
-  localStorage.convoCacheTime = Date.now()
   const localUserID = await getUserID()
   const result = await parapet({
     bridge: MESSAGES_BUS_ID,
@@ -107,8 +73,4 @@ export default async () => {
     type: UPDATE_CONVOS,
     payload: completeStructure
   })
-
-  // Cache the structure and dispatch the update
-  localStorage.convoCache = JSON.stringify(completeStructure)
-  localStorage.convoCacheTime = Date.now()
 }

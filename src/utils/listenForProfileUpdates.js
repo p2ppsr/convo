@@ -33,15 +33,6 @@ export default async () => {
       type: LOAD_FOREIGN_PROFILE,
       payload: { userID, name, photoURL }
     })
-    // Update cache if populated
-    if (localStorage[`profile-${userID}`]) {
-      localStorage[`profile-${userID}`] = JSON.stringify({
-        ...JSON.parse(localStorage[`profile-${userID}`]),
-        name,
-        photoURL
-      })
-      localStorage[`profile-${userID}-time`] = Date.now()
-    }
   }
 
   // Wait forever to avoid destroying the objects in this function

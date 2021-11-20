@@ -8,7 +8,8 @@ import {
   Button,
   TextField,
   Fab,
-  Typography
+  Typography,
+  CircularProgress
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import style from './style'
@@ -112,20 +113,20 @@ const ProfileEditor = ({ open, welcome, name, photoURL }) => {
     const canvas = document.createElement('canvas')
     const scaleX = image.naturalWidth / image.width
     const scaleY = image.naturalHeight / image.height
-    canvas.width = crop.width
-    canvas.height = crop.height
+    canvas.width = (crop.width || image.width)
+    canvas.height = (crop.height || image.height)
     const ctx = canvas.getContext('2d')
 
     ctx.drawImage(
       image,
       crop.x * scaleX,
       crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
+      (crop.width || image.width) * scaleX,
+      (crop.height || image.height) * scaleY,
       0,
       0,
-      crop.width,
-      crop.height
+      (crop.width || image.width),
+      (crop.height || image.height)
     )
 
     return new Promise((resolve, reject) => {
@@ -141,7 +142,7 @@ const ProfileEditor = ({ open, welcome, name, photoURL }) => {
   }
 
   const handleClose = () => {
-    if (!welcome) {
+    if (!welcome && !loading) {
       store.dispatch({
         type: UPDATE_LOCAL_PROFILE,
         payload: {
@@ -179,7 +180,7 @@ const ProfileEditor = ({ open, welcome, name, photoURL }) => {
                   variant='contained'
                   onClick={() => setImageCropSrc(null)}
                 >
-                Cancel
+                  Cancel
                 </Button>
                 <Button
                   variant='contained'
@@ -232,12 +233,14 @@ const ProfileEditor = ({ open, welcome, name, photoURL }) => {
           )}
         </DialogContent>
         <DialogActions>
-          <Button
-            type='submit'
-            disabled={(!!imageCropSrc) || loading || !editableName}
-          >
-            Save
-          </Button>
+          {loading ? <CircularProgress /> : (
+            <Button
+              type='submit'
+              disabled={(!!imageCropSrc) || !editableName}
+            >
+              Save
+            </Button>
+          )}
         </DialogActions>
       </form>
     </Dialog>

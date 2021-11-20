@@ -36,7 +36,6 @@ export default async message => {
     let messageData
 
     // If the message type is photo or secret-photo, message.content is a URL
-    // We put the URL in messageData so as not to clog up localStorage with giant photos
     if (messageType === 'photo' || messageType === 'secret-photo') {
       let parsedURL = atob(message.content)
       // For UHRP, resolve the URL to a host first
@@ -45,12 +44,6 @@ export default async message => {
         parsedURL = resolved[0]
       }
       messageData = parsedURL
-      // const result = await window.fetch(parsedURL)
-      // messageData = new Uint8Array(await result.arrayBuffer())
-      // // For secret photos, messageData needs to be base64 so it can be decrypted later
-      // if (messageType === 'secret-photo') {
-      //   messageData = Buffer.from(messageData).toString('base64')
-      // }
 
       /*
         When messageType is text or secret-text, the message content is sometimes more than 512 bytes long. If it is longer than 512 bytes, it needs to be fetched from Bitfs.
