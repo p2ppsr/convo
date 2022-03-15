@@ -4,7 +4,6 @@ import store from 'redux/store'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Convos from './pages/Convos'
 import Initializer from './components/Initializer'
-import Theme from './components/Theme'
 import ProfileEditor from './components/ProfileEditor'
 import SettingsModal from './components/SettingsModal'
 import { ToastContainer } from 'react-toastify'
@@ -27,25 +26,23 @@ const App = () => {
   return (
     <ErrorBoundary onError={e => console.error(e)}>
       <Provider store={store}>
-        <Theme>
-          <Router>
-            {/*
+        <Router>
+          {/*
             This is the application-specific initializer component. It waits
             for the user to be authorized, then starts listing for any of their
             new messages.
           */}
-            <Initializer />
-            <ProfileEditor />
-            <SettingsModal />
-            <ToastContainer
-              position='top-center'
-              hideProgressBar
-            />
-            <Switch>
-              <Route path='/' component={Convos} />
-            </Switch>
-          </Router>
-        </Theme>
+          <Initializer />
+          <ProfileEditor />
+          <SettingsModal />
+          <ToastContainer
+            position='top-center'
+            hideProgressBar
+          />
+          <Switch>
+            <Route path='/' component={Convos} />
+          </Switch>
+        </Router>
       </Provider>
     </ErrorBoundary>
   )
