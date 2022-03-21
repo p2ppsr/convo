@@ -11,8 +11,8 @@ ReactDOM.render(
       customPrompt
       appName='Convo Messenger'
       author='Ty Everett'
-      // eslint-disable-next-line no-useless-escape
-      description={'Do you value your privacy? We value ours, so we’ve got your back. Try Convo Messenger, the world’s first fully encrypted, decentralized messaging app that’s powered by blockchain technology using Babbage. Rather than feeding data silos information used to sell you garbage, why not own the messages you share with the people you trust? Own your identity. What a concept  ¯\\_(ツ)_/¯ '}
+      authorUrl='https://tyeverett.com'
+      description={'Do you value your privacy? We value ours, so we\'ve got your back. Try Convo Messenger, the world\'s first fully encrypted, decentralized messaging app that\'s powered by blockchain technology using Babbage.\nRather than feeding data silos information used to sell you garbage, why not own the messages you share with the people you trust? Own your identity. What a concept  ¯\\_(ツ)_/¯ '}
       appIcon='/icon.png'
       appImages={[
         '/previewSlide.jpeg'
