@@ -10,10 +10,7 @@ ReactDOM.render(
     <BabbagePrompt
       customPrompt
       appName='Convo Messenger'
-      appLinks={[
-        ['Ty Everett']
-      ]}
-      learnMoreUrl='http://google.com'
+      author='Ty Everett'
       // eslint-disable-next-line no-useless-escape
       description={'Do you value your privacy? We value ours, so we’ve got your back. Try Convo Messenger, the world’s first fully encrypted, decentralized messaging app that’s powered by blockchain technology using Babbage. Rather than feeding data silos information used to sell you garbage, why not own the messages you share with the people you trust? Own your identity. What a concept  ¯\\_(ツ)_/¯ '}
       appIcon='/icon.png'
