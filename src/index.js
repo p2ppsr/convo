@@ -4,6 +4,9 @@ import App from './App'
 import BabbagePrompt from '@babbage/react-prompt'
 import * as serviceWorker from './serviceWorker'
 import Theme from './components/Theme'
+import * as SDK from '@babbage/sdk'
+
+window.Babbage = SDK
 
 ReactDOM.render(
   <Theme>
