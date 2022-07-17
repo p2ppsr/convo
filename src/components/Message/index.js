@@ -37,7 +37,7 @@ const Message = ({ message, className, foreignProfiles }) => {
               key: 'primarySigning',
               path: 'm/2000/1',
               pub: await decompressPubkey(
-                foreignProfiles[message.foreignID].primarySigningPub
+                foreignProfiles[message.foreignID].primaryIdentity
               )
             }), 'base64')
           ])

@@ -17,6 +17,7 @@ import MessageForm from 'components/MessageForm'
 import EncryptedMessage from 'components/EncryptedMessage'
 import Message from 'components/Message'
 import { Img } from 'uhrp-react'
+import bridgeportResolvers from 'utils/bridgeportResolvers'
 
 const useStyles = makeStyles(style, {
   name: 'Convo'
@@ -69,6 +70,7 @@ const Convo = ({
               foreignProfiles[match.params.userID] &&
               foreignProfiles[match.params.userID].name
             }
+            bridgeportResolvers={bridgeportResolvers()}
           />
           <Typography variant='h3'>
             {
@@ -141,6 +143,7 @@ const Convo = ({
                           src={foreignProfiles[match.params.userID].photoURL}
                           alt={foreignProfiles[match.params.userID].name}
                           className={classes.center_photo}
+                          bridgeportResolvers={bridgeportResolvers()}
                         />
                         <Typography variant='h3' algin='center' paragraph>
                           {`Connect with ${foreignProfiles[match.params.userID].name}`}

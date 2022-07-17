@@ -9,6 +9,7 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import style from './style'
 import loadLocalProfile from 'redux/actions/localProfile/loadLocalProfile'
 import { Img } from 'uhrp-react'
+import bridgeportResolvers from 'utils/bridgeportResolvers'
 
 const useStyles = makeStyles(style, {
   name: 'LocalProfile'
@@ -42,7 +43,12 @@ const LocalProfile = ({ name, photoURL, loaded }) => {
 
   return (
     <div className={classes.content_wrap}>
-      <Img src={photoURL} className={classes.photo} alt='' />
+      <Img
+        src={photoURL}
+        className={classes.photo}
+        alt=''
+        bridgeportResolvers={bridgeportResolvers()}
+      />
       <Typography variant='h4'>
         {loaded ? name : '———'}
       </Typography>

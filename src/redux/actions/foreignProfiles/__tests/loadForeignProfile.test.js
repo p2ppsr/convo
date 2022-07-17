@@ -109,8 +109,8 @@ describe('loadForeignProfile', () => {
           userID: 'MOCKID',
           name: 'Bill',
           photoURL: 'https://x.bitfs.network/MOCK_URL',
-          primarySigningPub: 'PRIM',
-          privilegedSigningPub: 'PRIV'
+          primaryIdentity: 'PRIM',
+          privilegedIdentity: 'PRIV'
         }),
         'profile-MOCKID-time': expect.any(String)
       })
@@ -127,8 +127,8 @@ describe('loadForeignProfile', () => {
           userID: 'MOCKID',
           name: 'Bill',
           photoURL: 'https://x.bitfs.network/MOCK_URL',
-          primarySigningPub: 'PRIM',
-          privilegedSigningPub: 'PRIV'
+          primaryIdentity: 'PRIM',
+          privilegedIdentity: 'PRIV'
         }
       })
     })
@@ -141,8 +141,8 @@ describe('loadForeignProfile', () => {
         userID: 'MOCKID',
         name: 'Bill',
         photoURL: 'https://x.bitfs.network/MOCK_URL',
-        primarySigningPub: 'PRIM',
-        privilegedSigningPub: 'PRIV'
+        primaryIdentity: 'PRIM',
+        privilegedIdentity: 'PRIV'
       })
     })
   })

@@ -2,6 +2,7 @@ import store from 'redux/store'
 import { LOAD_FOREIGN_PROFILE } from 'redux/types'
 import { PROFILES_BUS_ID } from 'parameters'
 import parapet from 'parapet-js'
+import bridgeportResolvers from 'utils/bridgeportResolvers'
 
 /*
 Loads a foreign user profile into state, pulling it from the blockchain.
@@ -13,6 +14,7 @@ is a better way to do this, contributions are welcome.
 export default async userID => {
   // Find the profile with parapet
   const queryResult = await parapet({
+    resolvers: bridgeportResolvers(),
     bridge: PROFILES_BUS_ID,
     request: {
       type: 'json-query',
@@ -33,14 +35,14 @@ export default async userID => {
     return null
   }
   const {
-    name, photoURL, primarySigningPub, privilegedSigningPub
+    name, photoURL, primaryIdentity, privilegedIdentity
   } = queryResult[0]
   const newProfile = {
     userID,
     name,
     photoURL,
-    primarySigningPub,
-    privilegedSigningPub
+    primaryIdentity,
+    privilegedIdentity
   }
   // Dispatch and return the new profile
   store.dispatch({

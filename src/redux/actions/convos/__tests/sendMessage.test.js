@@ -19,8 +19,8 @@ const FOREIGN_PROFILE = {
   userID: '1FAXmkNfLpnSB3ctdRKarYjLasJZbZegeA',
   name: 'Ty Everett',
   photoURL: 'https://x.bitfs.network/184e9fbb452c71d5291af167a79a3162ccd840136fbdd31488abfb7518d4332b.out.0.6',
-  primarySigningPub: 'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDfhFC1W7aShgPQYbtQ4Q4os6ZjbVvRFju0siXZtjdNNj/nWc7IkNTstT53N9MJoHf5cnjkGTXwedyUaULMHd/Q==',
-  privilegedSigningPub: 'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEn9CoTTZcAjcvnRE4bM3qLoRm5RJSJzDFQh/qBRa9fkAKySDLMRpdXhbt69GKEXdPgUpDt7Q5czhKd/srbX6ivQ=='
+  primaryIdentity: 'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDfhFC1W7aShgPQYbtQ4Q4os6ZjbVvRFju0siXZtjdNNj/nWc7IkNTstT53N9MJoHf5cnjkGTXwedyUaULMHd/Q==',
+  privilegedIdentity: 'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEn9CoTTZcAjcvnRE4bM3qLoRm5RJSJzDFQh/qBRa9fkAKySDLMRpdXhbt69GKEXdPgUpDt7Q5czhKd/srbX6ivQ=='
 }
 
 jest.mock('redux/actions/foreignProfiles/loadForeignProfile')

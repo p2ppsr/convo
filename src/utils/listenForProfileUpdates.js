@@ -2,10 +2,12 @@ import { PROFILES_BUS_ID } from 'parameters'
 import store from 'redux/store'
 import { LOAD_FOREIGN_PROFILE } from 'redux/types'
 import parapet from 'parapet-js'
+import bridgeportResolvers from 'utils/bridgeportResolvers'
 
 // We rely on Bitsocket to notify us about profile updates
 export default async () => {
   const sock = await parapet({
+    resolvers: bridgeportResolvers(),
     bridge: PROFILES_BUS_ID,
     request: {
       type: 'socket',

@@ -21,6 +21,7 @@ import store from 'redux/store'
 import { UPDATE_LOCAL_PROFILE } from 'redux/types'
 import { toast } from 'react-toastify'
 import { Img } from 'uhrp-react'
+import bridgeportResolvers from 'utils/bridgeportResolvers'
 
 const useStyles = makeStyles(style, {
   name: 'ProfileEditor'
@@ -210,7 +211,8 @@ const ProfileEditor = ({ open, welcome, name, photoURL }) => {
                   <Img
                     src={editablePhotoURL}
                     className={classes.photo}
-                    alt=''
+                      alt=''
+                      bridgeportResolvers={bridgeportResolvers()}
                   />
                 )}
               </div>

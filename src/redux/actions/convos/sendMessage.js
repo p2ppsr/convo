@@ -16,7 +16,7 @@ export default async ({ to, message }) => {
   const foreignProfile = await loadForeignProfile(to)
   const localUserID = await getUserID()
   const foreignPrimarySigningPub = decompressPubkey(
-    foreignProfile.primarySigningPub
+    foreignProfile.primaryIdentity
   )
 
   // Encrypt the message type with the shared secret
@@ -57,7 +57,7 @@ export default async ({ to, message }) => {
   ) {
     // For secret messages, we need the privileged keyset shared secret.
     const foreignPrivilegedSigningPub = decompressPubkey(
-      foreignProfile.privilegedSigningPub
+      foreignProfile.privilegedIdentity
     )
     encryptedContent = await encrypt({
       key: 'privilegedSigning',

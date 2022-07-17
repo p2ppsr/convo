@@ -3,7 +3,6 @@ import { PROFILES_PROTOCOL_ADDRESS } from 'parameters'
 import store from 'redux/store'
 import { UPDATE_LOCAL_PROFILE } from 'redux/types'
 import getUserID from 'utils/getUserID'
-import bsv from 'bsv'
 import { getURLForFile, isValidURL } from 'uhrp-url'
 import { invoice, upload } from 'nanostore-publisher'
 
@@ -13,25 +12,21 @@ import { invoice, upload } from 'nanostore-publisher'
 */
 export default async ({ name, photo }) => {
   const userID = await getUserID()
-  let primarySigningPub = await getPrimarySigningPub({
+  let primaryIdentity = await getPrimarySigningPub({
     path: 'm/2000/1'
   })
-  let privilegedSigningPub = await getPrivilegedSigningPub({
+  let privilegedIdentity = await getPrivilegedSigningPub({
     path: 'm/2000/1',
     reason: 'Update your Convo profile'
   })
 
   // Convert the keys into the specified format
-  primarySigningPub = Uint8Array.from(Buffer.from(
-    bsv.HDPublicKey.fromString(primarySigningPub)
-      .publicKey
-      .toString(),
+  primaryIdentity = Uint8Array.from(Buffer.from(
+    primaryIdentity,
     'hex'
   ))
-  privilegedSigningPub = Uint8Array.from(Buffer.from(
-    bsv.HDPublicKey.fromString(privilegedSigningPub)
-      .publicKey
-      .toString(),
+  privilegedIdentity = Uint8Array.from(Buffer.from(
+    privilegedIdentity,
     'hex'
   ))
 
@@ -65,8 +60,8 @@ export default async ({ name, photo }) => {
     data: [
       new TextEncoder().encode(PROFILES_PROTOCOL_ADDRESS),
       new TextEncoder().encode(userID),
-      primarySigningPub,
-      privilegedSigningPub,
+      primaryIdentity,
+      privilegedIdentity,
       new TextEncoder().encode('' + parseInt(Date.now() / 1000)),
       new TextEncoder().encode(name),
       new TextEncoder().encode(photoURL)

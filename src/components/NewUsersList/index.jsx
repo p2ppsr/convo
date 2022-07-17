@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import findNewUsers from 'utils/findNewUsers'
 import { connect } from 'react-redux'
 import { Img } from 'uhrp-react'
+import bridgeportResolvers from 'utils/bridgeportResolvers'
 
 const useStyles = makeStyles(style, {
   name: 'NewUsersList'
@@ -42,7 +43,12 @@ const NewUsersList = ({ convos, localProfile }) => {
           >
             <ListItem button>
               <ListItemIcon>
-                <Img src={user.photoURL} className={classes.photo} alt='' />
+                <Img
+                  src={user.photoURL}
+                  className={classes.photo}
+                  alt=''
+                  bridgeportResolvers={bridgeportResolvers()}
+                />
               </ListItemIcon>
               <ListItemText inset primary={user.name} />
             </ListItem>

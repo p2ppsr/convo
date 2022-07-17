@@ -4,11 +4,13 @@ import store from 'redux/store'
 import { SEND_MESSAGE } from 'redux/types'
 import processMessageTransaction from 'utils/processMessageTransaction'
 import parapet from 'parapet-js'
+import bridgeportResolvers from 'utils/bridgeportResolvers'
 
 // We rely on Bitsocket to notify us about new messages
 export default async () => {
   const localUserID = await getUserID()
   const sock = await parapet({
+    resolvers: bridgeportResolvers(),
     bridge: MESSAGES_BUS_ID,
     request: {
       type: 'socket',

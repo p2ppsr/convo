@@ -21,7 +21,7 @@ export default async message => {
       return null
     }
     const foreignPrimarySigningPub = await decompressPubkey(
-      foreignProfile.primarySigningPub
+      foreignProfile.primaryIdentity
     )
 
     // The message type is encrypted with the shared secret

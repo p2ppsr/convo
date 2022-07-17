@@ -4,6 +4,7 @@ import { MESSAGES_BUS_ID } from 'parameters'
 import parapet from 'parapet-js'
 import processMessageTransaction from 'utils/processMessageTransaction'
 import getUserID from 'utils/getUserID'
+import bridgeportResolvers from 'utils/bridgeportResolvers'
 
 /*
 This action loads all conversations and populates them into state.
@@ -12,6 +13,7 @@ It will update the state from the blockchain.
 export default async () => {
   const localUserID = await getUserID()
   const result = await parapet({
+    resolvers: bridgeportResolvers(),
     bridge: MESSAGES_BUS_ID,
     request: {
       type: 'json-query',

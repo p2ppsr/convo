@@ -3,6 +3,7 @@ import { PROFILES_BUS_ID } from 'parameters'
 import store from 'redux/store'
 import { UPDATE_LOCAL_PROFILE } from 'redux/types'
 import getUserID from 'utils/getUserID'
+import bridgeportResolvers from 'utils/bridgeportResolvers'
 
 /*
 Loads the local user profile from the blockchain.
@@ -11,6 +12,7 @@ export default async () => {
   const userID = await getUserID()
   // Find the profile with parapet
   const queryResult = await parapet({
+    resolvers: bridgeportResolvers(),
     bridge: PROFILES_BUS_ID,
     request: {
       type: 'json-query',

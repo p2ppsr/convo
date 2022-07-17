@@ -30,7 +30,7 @@ const EncryptedMessage = ({ message, className, foreignProfiles }) => {
           key: 'privilegedSigning',
           path: 'm/2000/1',
           pub: await decompressPubkey(
-            foreignProfiles[message.foreignID].privilegedSigningPub
+            foreignProfiles[message.foreignID].privilegedIdentity
           ),
           reason,
           returnType: 'string'
@@ -49,7 +49,7 @@ const EncryptedMessage = ({ message, className, foreignProfiles }) => {
             key: 'privilegedSigning',
             path: 'm/2000/1',
             pub: await decompressPubkey(
-              foreignProfiles[message.foreignID].privilegedSigningPub
+              foreignProfiles[message.foreignID].privilegedIdentity
             ),
             reason
           }), 'base64')

@@ -6,6 +6,7 @@ import loadConvos from 'redux/actions/convos/loadConvos'
 import style from './style'
 import { makeStyles } from '@material-ui/core/styles'
 import { Img } from 'uhrp-react'
+import bridgeportResolvers from 'utils/bridgeportResolvers'
 
 const useStyles = makeStyles(style, {
   name: 'ConvoList'
@@ -68,7 +69,12 @@ const ConvoList = ({ convos, foreignProfiles }) => {
                 selected={window.location.pathname === `/convos/${userID}`}
               >
                 <ListItemIcon>
-                  <Img src={foreignProfiles[userID] && foreignProfiles[userID].photoURL} className={classes.photo} alt='' />
+                  <Img
+                    src={foreignProfiles[userID] && foreignProfiles[userID].photoURL}
+                    className={classes.photo}
+                    alt=''
+                    bridgeportResolvers={bridgeportResolvers()}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
