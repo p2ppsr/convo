@@ -1,0 +1,281 @@
+#####
+### Project Babbage — Services for Local Development
+#####
+version: '3.8'
+networks:
+  babnet:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/23
+
+### To avoid file/folder access issues on Windows, have docker use volumes for mysql and mongo.
+volumes:
+  secret-server-mysql-vol:
+  dojo-mysql-vol:
+  miniscribe-vol:
+  bridgeport-mongo-vol:
+
+services:
+
+  ###
+  ## Standard MetaNet Services
+  ###
+
+  # Secret Server
+  secret-server:
+    image: us.gcr.io/computing-with-integrity/secret-server
+    depends_on: 
+      - secret-server-mysql
+    ports:
+      - "3101:3101"
+    networks:
+      - babnet
+    environment:
+      ROUTING_PREFIX: ''
+      MIGRATE_KEY: 'test-key'
+      NODE_ENV: 'development'
+      SERVER_MODE: 'development'
+      # DOJO_URL: 'http://dojo:3102'
+      # For staging Dojo
+      # (used to allow the faucet to work)
+      DOJO_URL: 'https://staging-dojo.babbage.systems'
+      ENABLE_FAUCET: 'yes'
+      FAUCET_AMOUNT: 20000
+      FAUCET_FEE_PER_KB: 500
+      CODE_LEEWAY: 3
+      SECRET_SERVER_URL: 'http://localhost:3101'
+      HTTP_PORT: 3101
+      FAUCET_PRIVATE_KEY: '128b97608d8eabece91fb3d726d1a84840ccbcd62c74cb3e743b2458e3b9db26'
+      KNEX_DB_CONNECTION: '{"port":3111,"host":"172.20.1.1","user":"root","password":"test","database":"secret-server"}'
+  secret-server-mysql:
+    image: "mysql:8.0"
+    platform: linux/x86_64
+    hostname: 'secret-server-mysql'
+    command: 'mysqld --default-authentication-plugin=mysql_native_password --sync_binlog=0 --innodb_doublewrite=OFF  --innodb-flush-log-at-trx-commit=0 --innodb-flush-method=nosync'
+    restart: always
+    volumes:
+#      - './data/secret-server-mysql-data:/var/lib/mysql'
+      - 'secret-server-mysql-vol:/var/lib/mysql'
+    environment:
+      MYSQL_HOST: "127.0.0.1"
+      MYSQL_TCP_PORT: 3111
+      MYSQL_ROOT_PASSWORD: "test"
+      MYSQL_DATABASE: "secret-server"
+    ports:
+      - "3111:3111"
+    networks:
+      babnet:
+        ipv4_address: 172.20.1.1
+    healthcheck:
+      test: ["CMD-SHELL", 'mysqladmin ping']
+      interval: 10s
+      timeout: 2s
+      retries: 10
+    
+  # Dojo
+  dojo:
+    image: us.gcr.io/computing-with-integrity/dojo
+    depends_on: 
+      - dojo-mysql
+    ports:
+      - "3102:3102"
+    networks:
+      - babnet
+    environment:
+      ROUTING_PREFIX: ''
+      MIGRATE_KEY: 'test-key'
+      ALLOWED_PAYMAIL_DOMAINS: 'localhost:3102'
+      PRIMARY_PAYMAIL_DOMAIN: 'localhost:3102'
+      NODE_ENV: 'development'
+      BSV_NETWORK: 'testnet'
+      TAAL_TESTNET_API_KEY: 'testnet_ba132cc4d5b2ebde7ed0ee0f6ee3f678'
+      MINIMUM_ACCEPTABLE_FEE: 500
+      DOJO_URL: 'http://localhost:3102'
+      HTTP_PORT: 3102
+      PORT: 3102
+      KNEX_DB_CONNECTION: '{"port":3112,"host":"172.20.1.2","user":"root","password":"test","database":"dojo"}'
+      SERVER_PRIVATE_KEY: 'e7095a6ba25e2511090e002c3db92449826bb938a7dc23b34c20823d9770707b' # Test key
+  dojo-mysql:
+    image: "mysql:8.0"
+    platform: linux/x86_64
+    hostname: 'dojo-mysql'
+    command: 'mysqld --default-authentication-plugin=mysql_native_password --sync_binlog=0 --innodb_doublewrite=OFF  --innodb-flush-log-at-trx-commit=0 --innodb-flush-method=nosync'
+    restart: always
+    volumes:
+#      - './data/dojo-mysql-data:/var/lib/mysql'
+      - 'dojo-mysql-vol:/var/lib/mysql'
+    environment:
+      MYSQL_HOST: "127.0.0.1"
+      MYSQL_TCP_PORT: 3112
+      MYSQL_ROOT_PASSWORD: "test"
+      MYSQL_DATABASE: "dojo"
+    ports:
+      - "3112:3112"
+    networks:
+      babnet:
+        ipv4_address: 172.20.1.2
+    healthcheck:
+      test: ["CMD-SHELL", 'mysqladmin ping']
+      interval: 10s
+      timeout: 2s
+      retries: 10
+
+  # MiniScript — lightweight local NanoStore
+  miniscribe:
+    image: us.gcr.io/computing-with-integrity/miniscribe
+    ports:
+      - "3104:3104"
+    volumes:
+#      - ./data/miniscribe-data:/app/data
+      - 'miniscribe-vol:/app/data'
+    environment:
+      NODE_ENV: 'development'
+
+  # The Bridgeport Connecticut Proxy
+  connecticut:
+    image: us.gcr.io/computing-with-integrity/connecticut
+    ports:
+      - "3103:3103"
+    environment:
+      HTTP_PORT: 3103
+      PORT: 3103
+
+  ###
+  ## Bridgeport Derived Action Datasets
+  ###
+
+  # MongoDB
+  bridgeport-mongo:
+    image: mongo
+    command: |
+      bash -c "mongod --bind_ip_all --replSet rs0 --fork --syslog --port 3113 && mongo --port 3113 --eval \"if (!rs.status().ok) rs.initiate({_id : 'rs0', members : [{_id : 0, host : 'bridgeport-mongo:3113'}]})\" && mongo --port 3113 --eval \"while(true) {if (!rs.status().ok) break;sleep(1000)};\""
+    hostname: "bridgeport-mongo"
+    ports:
+      - 3113:27017
+    volumes:
+#      - ./data/bridgeport-mongo-data:/data/db
+      - bridgeport-mongo-vol:/data/db
+
+  ###
+  ## System Bridges (Used by the kernel, do not modify)
+  ###
+
+  # UMP — User Management Protocol
+  ump-reader:
+    hostname: "reader-1h48c3wg1ycgpt7tx61phzh8lx6v5tvukl"
+    image: us.gcr.io/computing-with-integrity/ump-reader
+    environment:
+      BRIDGE: 'eyJpZCI6IjFINDhDM3dnMVljZ3BUN1R4NjFQSHpIOEx4NnY1dFZVS0wifQ=='
+      PORT: 80
+      MONGODB_READ_CREDS: 'bW9uZ29kYjovL2JyaWRnZXBvcnQtbW9uZ286MzExMy9icmlkZ2VfMUg0OEMzd2cxWWNncFQ3VHg2MVBIekg4THg2djV0VlVLTA=='
+      MONGODB_DATABASE: 'bridge_1H48C3wg1YcgpT7Tx61PHzH8Lx6v5tVUKL'
+  ump-transformer:
+    hostname: "transformer-1h48c3wg1ycgpt7tx61phzh8lx6v5tvukl"
+    image: us.gcr.io/computing-with-integrity/ump-transformer
+    environment:
+      PORT: 80
+      MONGODB_WRITE_CREDS: 'mongodb://bridgeport-mongo:3113/bridge_1H48C3wg1YcgpT7Tx61PHzH8Lx6v5tVUKL'
+      MONGODB_DATABASE: 'bridge_1H48C3wg1YcgpT7Tx61PHzH8Lx6v5tVUKL'
+
+  # DPACP — DNS Protocol Access Control Protocol
+  dpacp-reader:
+    hostname: "reader-1hceb1o8bahkfe1degfn9kfuvdmjw2creg"
+    image: us.gcr.io/computing-with-integrity/dpacp-reader
+    environment:
+      BRIDGE: 'eyJpZCI6IjFIY2VCMW84YmFoa2ZlMWRFZ0ZOOWtGdVZEbUp3MkNSRWcifQ=='
+      PORT: 80
+      MONGODB_READ_CREDS: 'bW9uZ29kYjovL2JyaWRnZXBvcnQtbW9uZ286MzExMy9icmlkZ2VfMUhjZUIxbzhiYWhrZmUxZEVnRk45a0Z1VkRtSncyQ1JFZw=='
+      MONGODB_DATABASE: 'bridge_1HceB1o8bahkfe1dEgFN9kFuVDmJw2CREg'
+  dpacp-transformer:
+    hostname: "transformer-1hceb1o8bahkfe1degfn9kfuvdmjw2creg"
+    image: us.gcr.io/computing-with-integrity/dpacp-transformer
+    environment:
+      PORT: 80
+      MONGODB_WRITE_CREDS: 'mongodb://bridgeport-mongo:3113/bridge_1HceB1o8bahkfe1dEgFN9kFuVDmJw2CREg'
+      MONGODB_DATABASE: 'bridge_1HceB1o8bahkfe1dEgFN9kFuVDmJw2CREg'
+
+  # DSAP — DNS Spending Authorization Protocol
+  dsap-reader:
+    hostname: "reader-1lr6iemvft5ftep1n451c2oa3ze3jft29i"
+    image: us.gcr.io/computing-with-integrity/dsap-reader
+    environment:
+      BRIDGE: 'eyJpZCI6IjFMcjZpZU12ZlQ1ZlRFcDFONDUxQzJvQTN6RTNKRnQyOWkifQ=='
+      PORT: 80
+      MONGODB_READ_CREDS: 'bW9uZ29kYjovL2JyaWRnZXBvcnQtbW9uZ286MzExMy9icmlkZ2VfMUxyNmllTXZmVDVmVEVwMU40NTFDMm9BM3pFM0pGdDI5aQ=='
+      MONGODB_DATABASE: 'bridge_1Lr6ieMvfT5fTEp1N451C2oA3zE3JFt29i'
+  dsap-transformer:
+    hostname: "transformer-1lr6iemvft5ftep1n451c2oa3ze3jft29i"
+    image: us.gcr.io/computing-with-integrity/dsap-transformer
+    environment:
+      PORT: 80
+      MONGODB_WRITE_CREDS: 'mongodb://bridgeport-mongo:3113/bridge_1Lr6ieMvfT5fTEp1N451C2oA3zE3JFt29i'
+      MONGODB_DATABASE: 'bridge_1Lr6ieMvfT5fTEp1N451C2oA3zE3JFt29i'
+
+  ###
+  ## Debugging Tools — Uncomment when needed
+  ###
+
+  ## Mongo Express — web-based MongoDB database viewer
+  # mongo-express:
+  #   image: mongo-express
+  #   restart: always
+  #   ports:
+  #     - 8081:8081
+  #   environment:
+  #     ME_CONFIG_MONGODB_SERVER: bridgeport-mongo
+  #     ME_CONFIG_MONGODB_PORT: 3113
+  #   depends_on:
+  #     - bridgeport-mongo
+
+  ## PHPMyAdmin — Web-based SQL database viewer
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin
+  #   links:
+  #   - dojo-mysql
+  #   environment:
+  #     PMA_HOST: dojo-mysql
+  #     PMA_PORT: 3112
+  #     PMA_ARBITRARY: 1
+  #   restart: always
+  #   ports:
+  #   - 8090:80
+
+  ###
+  ## User-defined Bridges and Services — Extend to support your application
+  ###
+
+  ########## Your Bridges Here
+
+  ## Convo Messages Bridge
+  reader-c3xb:
+    hostname: "reader-1c3xb5jogptmf4mdu6b3vviniqyzhzzdzf"
+    build: ../convo-cump-bridge/reader
+    environment:
+      BRIDGE: 'eyJpZCI6IjFDM1hCNUpvZ3B0TUY0TWRVNkIzVnZpbmlxWXpIenpEemYifQ=='
+      PORT: 80
+      MONGODB_READ_CREDS: 'bW9uZ29kYjovL2JyaWRnZXBvcnQtbW9uZ286MzExMy9icmlkZ2VfMUMzWEI1Sm9ncHRNRjRNZFU2QjNWdmluaXFZekh6ekR6Zg=='
+      MONGODB_DATABASE: 'bridge_1C3XB5JogptMF4MdU6B3VviniqYzHzzDzf'
+  transformer-c3xb:
+    hostname: "transformer-1c3xb5jogptmf4mdu6b3vviniqyzhzzdzf"
+    build: ../convo-cump-bridge/transformer
+    environment:
+      PORT: 80
+      MONGODB_WRITE_CREDS: 'mongodb://bridgeport-mongo:3113/bridge_1C3XB5JogptMF4MdU6B3VviniqYzHzzDzf'
+      MONGODB_DATABASE: 'bridge_1C3XB5JogptMF4MdU6B3VviniqYzHzzDzf'
+
+  ## Convo Profiles Bridge
+  reader-6ibu:
+    hostname: "reader-16ibubm9kzhav3scxpxjv3bkvu3exdmdwg"
+    build: ../convo-cupp-bridge/reader
+    environment:
+      BRIDGE: 'eyJpZCI6IjE2aWJ1Qk05S3pIYXYzc0NYcHhqVjNia3ZVM0VYZG1EV0cifQ=='
+      PORT: 80
+      MONGODB_READ_CREDS: 'bW9uZ29kYjovL2JyaWRnZXBvcnQtbW9uZ286MzExMy9icmlkZ2VfMTZpYnVCTTlLekhhdjNzQ1hweGpWM2JrdlUzRVhkbURXRw=='
+      MONGODB_DATABASE: 'bridge_16ibuBM9KzHav3sCXpxjV3bkvU3EXdmDWG'
+  transformer-6ibu:
+    hostname: "transformer-16ibubm9kzhav3scxpxjv3bkvu3exdmdwg"
+    build: ../convo-cupp-bridge/transformer
+    environment:
+      PORT: 80
+      MONGODB_WRITE_CREDS: 'mongodb://bridgeport-mongo:3113/bridge_16ibuBM9KzHav3sCXpxjV3bkvU3EXdmDWG'
+      MONGODB_DATABASE: 'bridge_16ibuBM9KzHav3sCXpxjV3bkvU3EXdmDWG'
