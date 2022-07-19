@@ -8,13 +8,6 @@ networks:
       config:
         - subnet: 172.20.0.0/23
 
-### To avoid file/folder access issues on Windows, have docker use volumes for mysql and mongo.
-volumes:
-  secret-server-mysql-vol:
-  dojo-mysql-vol:
-  miniscribe-vol:
-  bridgeport-mongo-vol:
-
 services:
 
   ###
@@ -54,8 +47,7 @@ services:
     command: 'mysqld --default-authentication-plugin=mysql_native_password --sync_binlog=0 --innodb_doublewrite=OFF  --innodb-flush-log-at-trx-commit=0 --innodb-flush-method=nosync'
     restart: always
     volumes:
-#      - './data/secret-server-mysql-data:/var/lib/mysql'
-      - 'secret-server-mysql-vol:/var/lib/mysql'
+     - './data/secret-server-mysql-data:/var/lib/mysql'
     environment:
       MYSQL_HOST: "127.0.0.1"
       MYSQL_TCP_PORT: 3111
@@ -102,8 +94,7 @@ services:
     command: 'mysqld --default-authentication-plugin=mysql_native_password --sync_binlog=0 --innodb_doublewrite=OFF  --innodb-flush-log-at-trx-commit=0 --innodb-flush-method=nosync'
     restart: always
     volumes:
-#      - './data/dojo-mysql-data:/var/lib/mysql'
-      - 'dojo-mysql-vol:/var/lib/mysql'
+     - './data/dojo-mysql-data:/var/lib/mysql'
     environment:
       MYSQL_HOST: "127.0.0.1"
       MYSQL_TCP_PORT: 3112
@@ -126,8 +117,7 @@ services:
     ports:
       - "3104:3104"
     volumes:
-#      - ./data/miniscribe-data:/app/data
-      - 'miniscribe-vol:/app/data'
+     - ./data/miniscribe-data:/app/data
     environment:
       NODE_ENV: 'development'
 
@@ -153,8 +143,7 @@ services:
     ports:
       - 3113:27017
     volumes:
-#      - ./data/bridgeport-mongo-data:/data/db
-      - bridgeport-mongo-vol:/data/db
+     - ./data/bridgeport-mongo-data:/data/db
 
   ###
   ## System Bridges (Used by the kernel, do not modify)
