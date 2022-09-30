@@ -18,10 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-         ref: ${{ env.CURRENT_BRANCH }}
-      - name: Docker Layer Caching
-        uses: satackey/action-docker-layer-caching@v0.0.11
       - uses: actions/setup-node@v3
         with:
           node-version: 16
